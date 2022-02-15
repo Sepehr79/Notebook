@@ -1,6 +1,5 @@
 package com.kucess.notebook.model.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -11,7 +10,6 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("ADM")
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class Admin extends Person {
 	
