@@ -14,7 +14,8 @@
 	<name>notebook</name>
 	<description>Notebook for kucess member activities</description>
 	<properties>
-		<java.version>11</java.version>
+		<sonar.organization>sepehr79</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 		<dependency>
