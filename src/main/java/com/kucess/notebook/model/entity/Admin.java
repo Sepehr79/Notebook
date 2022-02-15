@@ -1,43 +1,46 @@
 package com.kucess.notebook.model.entity;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@DiscriminatorValue("ADM")
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class Admin extends Person {
 	
 	@OneToMany(mappedBy = "admin")
 	private List<Activity> activities;
 	
 	
-	@OneToMany(mappedBy = "admins")
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name = "admin_employee", joinColumns = @JoinColumn(name="employee_id"), inverseJoinColumns = @JoinColumn(name="admin_id"))
 	private List<Employee> employees;
 	
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
-	@JoinTable(name = "admin_authority")
-	private Set<Authority> authorities;
-	
-	public void addAuthority(Authority authority) {
-		if (authority == null) {
+	public void addEmployee(Employee employee) {
+		if (employee == null) {
 			throw new IllegalArgumentException();
 		}
-		if (authorities == null) {
-			authorities = new HashSet<Authority>();
+		if (employees == null) {
+			employees = new ArrayList<Employee>();
 		}
-		authorities.add(authority);
-		
+		employees.add(employee);
 	}
+	
+	
 
 }
