@@ -1,10 +1,9 @@
 package com.kucess.notebook.model.repo;
 
-import java.util.Optional;
-
+import com.kucess.notebook.model.entity.Employee;
 import org.springframework.data.repository.CrudRepository;
 
-import com.kucess.notebook.model.entity.Employee;
+import java.util.Optional;
 
 public interface EmployeeRepo extends CrudRepository<Employee, Long>{
 

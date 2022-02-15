@@ -1,10 +1,9 @@
 package com.kucess.notebook.model.repo;
 
-import java.util.Optional;
-
+import com.kucess.notebook.model.entity.Admin;
 import org.springframework.data.repository.CrudRepository;
 
-import com.kucess.notebook.model.entity.Admin;
+import java.util.Optional;
 
 public interface AdminRepo extends CrudRepository<Admin, Long> {
 
