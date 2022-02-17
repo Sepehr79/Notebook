@@ -1,6 +1,8 @@
 package com.kucess.notebook.model.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -9,15 +11,17 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("EMP")
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@Getter
+@Setter
 public class Employee extends Person {
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
 	private List<Activity> activities;
 	
 	
-	@ManyToMany(mappedBy = "employees")
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
 	private List<Admin> admins;
 	
 	
@@ -26,7 +30,7 @@ public class Employee extends Person {
 			throw new IllegalArgumentException();
 		}
 		if (admins == null) {
-			admins = new ArrayList<Admin>();
+			admins = new ArrayList<>();
 		}
 		admins.add(admin);
 	}

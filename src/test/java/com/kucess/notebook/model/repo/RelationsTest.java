@@ -2,7 +2,7 @@ package com.kucess.notebook.model.repo;
 
 import com.kucess.notebook.model.entity.Activity;
 import com.kucess.notebook.model.entity.Admin;
-import com.kucess.notebook.model.entity.Authority;
+import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.entity.Employee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test")
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test1")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RelationsTest {
 	
@@ -31,6 +31,7 @@ class RelationsTest {
 			.lastName("KUCESS")
 			.userName("KUCESS79")
 			.password("1234")
+			.authorityType(AuthorityType.ADMIN)
 			.build();
 
 	private static Employee employee = Employee.builder()
@@ -38,14 +39,13 @@ class RelationsTest {
 			.lastName("BBB")
 			.userName("CCC")
 			.password("1234")
+			.authorityType(AuthorityType.EMPLOYEE)
 			.build();
 
 	private static Activity activity;
 
 	@BeforeAll
 	void configRelations(){
-		admin.addAuthority(new Authority("ADM"));
-		employee.addAuthority(new Authority("EMP"));
 		admin.addEmployee(employee);
 		activity = Activity.builder()
 				.activityName("Test")
@@ -64,13 +64,22 @@ class RelationsTest {
 	@Test
 	void testEmployeeRelations() {
 		Assertions.assertTrue(employeeRepo.findByUserName("CCC").isPresent());
-		Assertions.assertEquals("EMP" ,employeeRepo.findByUserName("CCC").get().getAuthorities().get(0).getAuthorityName());
+		assertEquals("EMPLOYEE" ,employeeRepo.findByUserName("CCC").get().getAuthorityType().name());
 	}
 
 	@Test
 	void testActivityRelations(){
-		Assertions.assertEquals(activity.getActivityName(), activityRepo.findById(activity.getId()).get().getActivityName());
+		assertEquals(activity.getActivityName(), activityRepo.findById(activity.getId()).get().getActivityName());
 	}
+
+	@Test
+	void testChangeUserName(){
+		assertTrue(adminRepo.findByUserName("KUCESS79").isPresent());
+		adminRepo.save(admin.toBuilder().userName("test").build());
+		assertFalse(adminRepo.findByUserName("KUCESS79").isPresent());
+		assertTrue(adminRepo.findByUserName("test").isPresent());
+	}
+
 	
 
 }

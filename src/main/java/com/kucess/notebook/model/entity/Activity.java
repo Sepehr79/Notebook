@@ -1,9 +1,6 @@
 package com.kucess.notebook.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,22 +9,25 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @Builder
+@RequiredArgsConstructor
 public class Activity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String activityName;
+	private @NonNull String activityName;
 	
-	private String activityDescription;
+	private @NonNull String activityDescription;
 	
-	private double score;
+	private @NonNull double score;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
 	private Employee employee;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
 	private Admin admin;
 
 }
