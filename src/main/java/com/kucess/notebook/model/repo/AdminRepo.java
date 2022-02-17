@@ -1,7 +1,6 @@
 package com.kucess.notebook.model.repo;
 
 import com.kucess.notebook.model.entity.Admin;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
