@@ -96,6 +96,7 @@ class AdminServiceTest {
         addEmployeeToAdminTest();
         adminService.removeEmployeeFromAdmin("test", "emp");
         assertEquals(0, adminService.findByUserName("test").getEmployeeIOs().size());
+        assertNotNull(employeeRepo.findByUserName("emp"));
     }
 
 }
