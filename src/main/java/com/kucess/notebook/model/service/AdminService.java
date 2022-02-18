@@ -81,6 +81,13 @@ public class AdminService {
         admin.addEmployee(employee);
     }
 
+    public EmployeeIO removeEmployeeFromAdmin(String adminUserName, String employeeUserName){
+        Admin admin = findAdminOrThrowException(adminUserName);
+        Employee employee = findEmployeeOrThrowException(employeeUserName);
+        admin.getEmployees().remove(employee);
+        return employeeIO(employee);
+    }
+
     private Admin findAdminOrThrowException(String userName){
         return adminRepo.findByUserName(userName)
                 .orElseThrow(IllegalArgumentException::new);
@@ -89,6 +96,14 @@ public class AdminService {
     private Employee findEmployeeOrThrowException(String adminUserName){
         return employeeRepo.findByUserName(adminUserName)
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private EmployeeIO employeeIO(Employee employee){
+        return EmployeeIO.builder()
+                .name(employee.getName())
+                .lastName(employee.getLastName())
+                .userName(employee.getUserName())
+                .build();
     }
 
 

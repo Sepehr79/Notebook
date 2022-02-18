@@ -90,4 +90,12 @@ class AdminServiceTest {
                 .get().getName());
     }
 
+    @Test
+    @Transactional
+    void testRemoveEmployeeFromAdmin(){
+        addEmployeeToAdminTest();
+        adminService.removeEmployeeFromAdmin("test", "emp");
+        assertEquals(0, adminService.findByUserName("test").getEmployeeIOs().size());
+    }
+
 }
