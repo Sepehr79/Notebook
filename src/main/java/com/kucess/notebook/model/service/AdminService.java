@@ -8,11 +8,11 @@ import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.AdminRepo;
+import com.kucess.notebook.model.repo.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 public class AdminService {
 
     private final AdminRepo adminRepo;
+
+    private final EmployeeRepo employeeRepo;
 
     /**
      * Register new admin
@@ -39,11 +41,7 @@ public class AdminService {
      * Update admin
      */
     public void updateAdmin(AdminIO adminIO, String userName){
-        Optional<Admin> adminOptional = adminRepo.findByUserName(userName);
-        if (adminOptional.isEmpty()){
-            throw new IllegalArgumentException();
-        }
-        Admin admin = adminOptional.get();
+        Admin admin = findAdminOrThrowException(userName);
         adminRepo.save(
                 admin.toBuilder()
                     .name(adminIO.getName())
@@ -59,11 +57,7 @@ public class AdminService {
      * Delete admin
      */
     public void deleteByUserName(String userName){
-        Optional<Admin> adminOptional = adminRepo.findByUserName(userName);
-        if (adminOptional.isEmpty()){
-            throw new IllegalArgumentException();
-        }
-        adminRepo.delete(adminOptional.get());
+        adminRepo.delete(findAdminOrThrowException(userName));
     }
 
     /**
@@ -72,13 +66,31 @@ public class AdminService {
      * @return admin
      */
     public AdminIO findByUserName(String userName){
-        Optional<Admin> adminOptional = adminRepo.findByUserName(userName);
-        if (adminOptional.isPresent()){
-            Admin admin = adminOptional.get();
-            return adminIO(admin);
-        }
-        throw new IllegalArgumentException();
+        Admin admin = findAdminOrThrowException(userName);
+        return adminIO(admin);
     }
+
+    public void addEmployeeToAdmin(String adminUserName, EmployeeIO employeeIO){
+        Admin admin = findAdminOrThrowException(adminUserName);
+        admin.addEmployee(employee(employeeIO));
+    }
+
+    public void addEmployeeToAdmin(String adminUserName, String employeeUserName){
+        Admin admin = findAdminOrThrowException(adminUserName);
+        Employee employee = findEmployeeOrThrowException(employeeUserName);
+        admin.addEmployee(employee);
+    }
+
+    private Admin findAdminOrThrowException(String userName){
+        return adminRepo.findByUserName(userName)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private Employee findEmployeeOrThrowException(String adminUserName){
+        return employeeRepo.findByUserName(adminUserName)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
 
     private AdminIO adminIO(Admin admin){
         return AdminIO.builder()
@@ -86,6 +98,16 @@ public class AdminService {
                 .name(admin.getName())
                 .lastName(admin.getLastName())
                 .employeeIOs(employeeIOs(admin.getEmployees()))
+                .build();
+    }
+
+    private Employee employee(EmployeeIO employeeIO){
+        return Employee.builder()
+                .name(employeeIO.getName())
+                .lastName(employeeIO.getLastName())
+                .userName(employeeIO.getUserName())
+                .password(employeeIO.getPassword())
+                .authorityType(AuthorityType.EMPLOYEE)
                 .build();
     }
 

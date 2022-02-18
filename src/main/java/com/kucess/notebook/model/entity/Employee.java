@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 public class Employee extends Person {
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Activity> activities;
 	
 	

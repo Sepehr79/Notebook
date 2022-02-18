@@ -29,7 +29,7 @@ public class Admin extends Person {
 			throw new IllegalArgumentException();
 		}
 		if (employees == null) {
-			employees = new ArrayList<Employee>();
+			employees = new ArrayList<>();
 		}
 		employees.add(employee);
 	}
