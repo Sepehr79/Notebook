@@ -10,6 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @RequiredArgsConstructor
+@Setter
 public class Activity {
 	
 	@Id

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 public class Admin extends Person {
 	
-	@OneToMany(mappedBy = "admin")
+	@OneToMany(mappedBy = "admin", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	private List<Activity> activities;
 
 
@@ -32,6 +32,14 @@ public class Admin extends Person {
 			employees = new ArrayList<>();
 		}
 		employees.add(employee);
+	}
+
+	public void addActivity(Activity activity){
+		if (activity == null)
+			throw new IllegalArgumentException();
+		if (activities == null)
+			activities = new ArrayList<>();
+		activities.add(activity);
 	}
 	
 	

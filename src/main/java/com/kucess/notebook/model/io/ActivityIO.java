@@ -12,7 +12,7 @@ import lombok.*;
 public class ActivityIO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private long index;
+    private int index;
 
     private @NonNull String activityName;
 

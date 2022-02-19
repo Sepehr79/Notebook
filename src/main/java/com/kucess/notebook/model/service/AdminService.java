@@ -92,16 +92,36 @@ public class AdminService {
         return employeeIO(employee);
     }
 
-    public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activity){
+    public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
         Employee employee = findEmployeeOrThrowException(employeeUserName);
         Admin admin = findAdminOrThrowException(adminUserName);
-        employee.addActivity(Activity.builder()
-                .activityName(activity.getActivityName())
-                        .score(activity.getScore())
-                        .activityDescription(activity.getActivityDescription())
-                        .admin(admin)
-                        .employee(employee)
-                .build());
+        Activity activity = Activity.builder()
+                .activityName(activityIO.getActivityName())
+                .score(activityIO.getScore())
+                .activityDescription(activityIO.getActivityDescription())
+                .admin(admin)
+                .employee(employee)
+                .build();
+        employee.addActivity(activity);
+        admin.addActivity(activity);
+    }
+
+    public void updateActivityFromEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
+        List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
+        Activity activity = activities.get(activityIO.getIndex() - 1);
+        activity.setActivityName(activityIO.getActivityName());
+        activity.setActivityDescription(activityIO.getActivityDescription());
+        activity.setScore(activityIO.getScore());
+    }
+
+    public void deleteActivityFromEmployee(String adminUserName, String employeeUserName, int index){
+        List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
+        Activity activity = activities.get(index - 1);
+        Admin admin = findAdminOrThrowException(adminUserName);
+        Employee employee = findEmployeeOrThrowException(employeeUserName);
+        employee.getActivities().remove(activity);
+        admin.getActivities().remove(activity);
+        activityRepo.deleteById(activity.getId());
     }
 
     public List<ActivityIO> findByAdminUserNameAndEmployeeUserName(String adminUserName, String employeeUserName){

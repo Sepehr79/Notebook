@@ -1,10 +1,13 @@
 package com.kucess.notebook.model.service;
 
 import com.kucess.notebook.model.entity.Activity;
+import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
+import com.kucess.notebook.model.repo.ActivityRepo;
+import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +30,12 @@ class AdminServiceTest {
 
     @Autowired
     EmployeeRepo employeeRepo;
+
+    @Autowired
+    ActivityRepo activityRepo;
+
+    @Autowired
+    AdminRepo adminRepo;
 
     private static final AdminIO ADMIN_IO = AdminIO.builder()
             .name("kuc")
@@ -117,12 +126,24 @@ class AdminServiceTest {
         Activity activity = employee.getActivities().stream().findFirst().get();
         assertEquals("test" ,activity.getAdmin().getUserName());
         assertEquals("emp", activity.getEmployee().getUserName());
+        Admin admin = adminRepo.findByUserName("test").get();
+        assertEquals(1, admin.getActivities().size());
 
         List<ActivityIO> activities = adminService.findByAdminUserNameAndEmployeeUserName("test", "emp");
         ActivityIO activityIO = activities.stream().findFirst().get();
         assertEquals(1, activities.size());
         assertEquals(activity.getActivityName(), activityIO.getActivityName());
         assertEquals(1 ,activityIO.getIndex());
+
+        activityIO.setScore(20);
+        adminService.updateActivityFromEmployee("test", "emp", activityIO);
+        assertEquals(20 ,employeeRepo.findByUserName("emp").get().getActivities().stream().findFirst().get().getScore());
+
+
+        adminService.deleteActivityFromEmployee("test", "emp", 1);
+        assertEquals(0 ,employeeRepo.findByUserName("emp").get().getActivities().size());
+        assertFalse(activityRepo.findAll().iterator().hasNext());
+        assertEquals(0, adminRepo.findByUserName("test").get().getActivities().size());
     }
 
 }
