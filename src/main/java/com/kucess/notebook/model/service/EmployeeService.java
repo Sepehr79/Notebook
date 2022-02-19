@@ -47,7 +47,12 @@ public class EmployeeService {
     private List<ActivityIO> activityIOs(List<Activity> activities){
         if (activities != null && !activities.isEmpty()){
             return activities.stream().map(activity ->
-                    new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore(), activity.getAdmin().getUserName())).collect(Collectors.toList());
+                    {
+                        ActivityIO activityIO = new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore());
+                        activityIO.setAdminUserName(activity.getAdmin().getUserName());
+                        return activityIO;
+                    }
+            ).collect(Collectors.toList());
         }
         return List.of();
     }

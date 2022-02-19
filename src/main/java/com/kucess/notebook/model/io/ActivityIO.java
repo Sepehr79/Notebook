@@ -7,7 +7,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Builder
+@Setter
 public class ActivityIO {
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private long index;
 
     private @NonNull String activityName;
 

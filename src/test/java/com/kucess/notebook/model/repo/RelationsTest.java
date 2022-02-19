@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test1")
+@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test5")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RelationsTest {
 	

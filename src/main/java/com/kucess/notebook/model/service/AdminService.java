@@ -7,11 +7,13 @@ import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
+import com.kucess.notebook.model.repo.ActivityRepo;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,8 @@ public class AdminService {
     private final AdminRepo adminRepo;
 
     private final EmployeeRepo employeeRepo;
+
+    private final ActivityRepo activityRepo;
 
     /**
      * Register new admin
@@ -86,6 +90,31 @@ public class AdminService {
         Employee employee = findEmployeeOrThrowException(employeeUserName);
         admin.getEmployees().remove(employee);
         return employeeIO(employee);
+    }
+
+    public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activity){
+        Employee employee = findEmployeeOrThrowException(employeeUserName);
+        Admin admin = findAdminOrThrowException(adminUserName);
+        employee.addActivity(Activity.builder()
+                .activityName(activity.getActivityName())
+                        .score(activity.getScore())
+                        .activityDescription(activity.getActivityDescription())
+                        .admin(admin)
+                        .employee(employee)
+                .build());
+    }
+
+    public List<ActivityIO> findByAdminUserNameAndEmployeeUserName(String adminUserName, String employeeUserName){
+        List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
+        List<ActivityIO> activityIOList = new ArrayList<>();
+        int counter = 1;
+        for (Activity activity: activities){
+            ActivityIO activityIO = new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore());
+            activityIO.setAdminUserName(adminUserName);
+            activityIO.setIndex(counter++);
+            activityIOList.add(activityIO);
+        }
+        return activityIOList;
     }
 
     private Admin findAdminOrThrowException(String userName){

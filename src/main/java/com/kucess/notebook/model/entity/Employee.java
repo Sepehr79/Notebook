@@ -34,6 +34,16 @@ public class Employee extends Person {
 		}
 		admins.add(admin);
 	}
+
+	public void addActivity(Activity activity){
+		if (activity == null){
+			throw new IllegalArgumentException();
+		}
+		if (activities == null){
+			activities = new ArrayList<>();
+		}
+		activities.add(activity);
+	}
 	
 	
 }

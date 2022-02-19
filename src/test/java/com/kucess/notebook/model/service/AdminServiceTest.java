@@ -1,6 +1,8 @@
 package com.kucess.notebook.model.service;
 
+import com.kucess.notebook.model.entity.Activity;
 import com.kucess.notebook.model.entity.Employee;
+import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.EmployeeRepo;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,6 +100,29 @@ class AdminServiceTest {
         adminService.removeEmployeeFromAdmin("test", "emp");
         assertEquals(0, adminService.findByUserName("test").getEmployeeIOs().size());
         assertNotNull(employeeRepo.findByUserName("emp"));
+    }
+
+    @Test
+    @Transactional
+    void testAddActivityToEmployee(){
+        addEmployeeToAdminTest();
+        adminService.addActivityToEmployee("test", "emp", ActivityIO.builder()
+                        .activityName("test")
+                        .activityDescription("This is just a test")
+                        .score(10)
+                .build());
+
+        Employee employee = employeeRepo.findByUserName("emp").get();
+        assertEquals(1 ,employee.getActivities().size());
+        Activity activity = employee.getActivities().stream().findFirst().get();
+        assertEquals("test" ,activity.getAdmin().getUserName());
+        assertEquals("emp", activity.getEmployee().getUserName());
+
+        List<ActivityIO> activities = adminService.findByAdminUserNameAndEmployeeUserName("test", "emp");
+        ActivityIO activityIO = activities.stream().findFirst().get();
+        assertEquals(1, activities.size());
+        assertEquals(activity.getActivityName(), activityIO.getActivityName());
+        assertEquals(1 ,activityIO.getIndex());
     }
 
 }
