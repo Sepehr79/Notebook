@@ -6,11 +6,11 @@ import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Getter
 @RequiredArgsConstructor
-@Component
+@Service
 public class UserService {
 
     private final AdminRepo adminRepo;
