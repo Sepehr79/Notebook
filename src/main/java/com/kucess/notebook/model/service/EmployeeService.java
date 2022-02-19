@@ -1,8 +1,10 @@
 package com.kucess.notebook.model.service;
 
 import com.kucess.notebook.model.entity.Activity;
+import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.ActivityIO;
+import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class EmployeeService {
                 .name(employee.getName())
                 .lastName(employee.getLastName())
                 .userName(employee.getUserName())
+                .adminIOS(adminIOS(employee.getAdmins()))
                 .activityIOs(activityIOs(employee.getActivities()))
                 .build();
     }
@@ -39,6 +42,13 @@ public class EmployeeService {
         employeeRepo.save(
                 employee.toBuilder().password(password).build()
         );
+    }
+
+    public List<AdminIO> adminIOS(List<Admin> admins){
+        if (admins != null && !admins.isEmpty()){
+            return admins.stream().map(admin -> AdminIO.builder().name(admin.getName()).lastName(admin.getLastName()).build()).collect(Collectors.toList());
+        }
+        return List.of();
     }
 
     /**

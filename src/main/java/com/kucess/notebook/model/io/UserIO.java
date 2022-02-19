@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserIO {
 
     private String name;
@@ -18,7 +19,6 @@ public class UserIO {
 
     private String userName;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
 
 }

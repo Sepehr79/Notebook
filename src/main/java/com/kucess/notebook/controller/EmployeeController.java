@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("${api.path}")
 public class EmployeeController {
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
-    @PostMapping("/employees/{userName}")
+    @GetMapping("/employees/{userName}")
     public EmployeeIO findEmployeeByUserName(@PathVariable String userName){
         return employeeService.findByUserName(userName);
     }

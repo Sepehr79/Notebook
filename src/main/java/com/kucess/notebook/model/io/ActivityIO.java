@@ -9,9 +9,9 @@ import lombok.*;
 @RequiredArgsConstructor
 @Builder
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityIO {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private int index;
 
     private @NonNull String activityName;
@@ -20,7 +20,6 @@ public class ActivityIO {
 
     private @NonNull double score;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String adminUserName;
 
 }
