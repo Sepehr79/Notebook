@@ -21,7 +21,7 @@ public class EmployeeService extends UserService {
 
     public void addEmployeeToAdmin(String adminUserName, EmployeeIO employeeIO){
         Admin admin = getAdminByUserName(adminUserName);
-        admin.addEmployee(ioUserConvertor.employee(employeeIO));
+        admin.addEmployee(ioUserConvertor.iOToEmployee(employeeIO));
     }
 
     public void addEmployeeToAdmin(String adminUserName, String employeeUserName){
@@ -34,7 +34,6 @@ public class EmployeeService extends UserService {
         Admin admin = getAdminByUserName(adminUserName);
         Employee employee = getEmployeeByUserName(employeeUserName);
         admin.getEmployees().remove(employee);
-        ioUserConvertor.employeeIO(employee);
     }
 
     public EmployeeIO findEmployeeByUserName(String userName){
@@ -43,8 +42,8 @@ public class EmployeeService extends UserService {
                 .name(employee.getName())
                 .lastName(employee.getLastName())
                 .userName(employee.getUserName())
-                .adminIOS(ioUserConvertor.adminIOS(employee.getAdmins()))
-                .activityIOs(ioUserConvertor.activityIOs(employee.getActivities()))
+                .adminIOS(ioUserConvertor.adminToIO(employee.getAdmins()))
+                .activityIOs(ioUserConvertor.activityToIO(employee.getActivities()))
                 .build();
     }
 

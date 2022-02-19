@@ -15,25 +15,17 @@ import java.util.stream.Collectors;
 @Component
 public class IOUserConvertor {
 
-    public EmployeeIO employeeIO(Employee employee){
-        return EmployeeIO.builder()
-                .name(employee.getName())
-                .lastName(employee.getLastName())
-                .userName(employee.getUserName())
-                .build();
-    }
 
-
-    public AdminIO adminIO(Admin admin){
+    public AdminIO adminToIO(Admin admin){
         return AdminIO.builder()
                 .userName(admin.getUserName())
                 .name(admin.getName())
                 .lastName(admin.getLastName())
-                .employeeIOs(employeeIOs(admin.getEmployees()))
+                .employeeIOs(employeeToIO(admin.getEmployees()))
                 .build();
     }
 
-    public Employee employee(EmployeeIO employeeIO){
+    public Employee iOToEmployee(EmployeeIO employeeIO){
         return Employee.builder()
                 .name(employeeIO.getName())
                 .lastName(employeeIO.getLastName())
@@ -43,20 +35,20 @@ public class IOUserConvertor {
                 .build();
     }
 
-    public List<EmployeeIO> employeeIOs(List<Employee> employees){
+    public List<EmployeeIO> employeeToIO(List<Employee> employees){
         if (employees != null && !employees.isEmpty()){
             return employees.stream().map(employee -> EmployeeIO.builder()
                     .name(employee.getName())
                     .lastName(employee.getLastName())
                     .userName(employee.getUserName())
-                    .activityIOs(activityIOs(employee.getActivities()))
+                    .activityIOs(activityToIO(employee.getActivities()))
                     .build()).collect(Collectors.toList());
         }
         return List.of();
     }
 
 
-    public List<AdminIO> adminIOS(List<Admin> admins){
+    public List<AdminIO> adminToIO(List<Admin> admins){
         if (admins != null && !admins.isEmpty()){
             return admins.stream().map(admin -> AdminIO.builder().name(admin.getName()).lastName(admin.getLastName()).build()).collect(Collectors.toList());
         }
@@ -66,7 +58,7 @@ public class IOUserConvertor {
     /**
      * @param activities from employee
      */
-    public List<ActivityIO> activityIOs(List<Activity> activities){
+    public List<ActivityIO> activityToIO(List<Activity> activities){
         if (activities != null && !activities.isEmpty()){
             return activities.stream().map(activity ->
                     {
