@@ -36,10 +36,10 @@ class EmployeeServiceTest {
     @Test
     @Transactional
     void testGetEmployeeAndChangePassword(){
-        EmployeeIO employee = employeeService.findByUserName("kucess");
+        EmployeeIO employee = employeeService.findEmployeeByUserName("kucess");
         assertEquals("kuc" ,employee.getName());
 
-        employeeService.changePassword("kucess", "change");
+        employeeService.changeEmployeePassword("kucess", "change");
         assertEquals("change" ,employeeRepo.findByUserName("kucess").get().getPassword());
     }
 

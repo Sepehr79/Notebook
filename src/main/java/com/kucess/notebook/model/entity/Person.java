@@ -2,6 +2,7 @@ package com.kucess.notebook.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @SuperBuilder(toBuilder = true)
+@Setter
 public class Person {
 	
 	@Id
