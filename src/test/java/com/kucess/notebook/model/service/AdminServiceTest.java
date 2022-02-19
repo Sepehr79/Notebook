@@ -146,4 +146,25 @@ class AdminServiceTest {
         assertEquals(0, adminRepo.findByUserName("test").get().getActivities().size());
     }
 
+    @Test
+    @Transactional
+    void removeAndEditMultipleActivities(){
+        addEmployeeToAdminTest();
+        ActivityIO activityIO1 = ActivityIO.builder().activityName("1").activityDescription("1").score(10).build();
+        ActivityIO activityIO2 = ActivityIO.builder().activityName("2").activityDescription("2").score(20).build();
+        ActivityIO activityIO3 = ActivityIO.builder().activityName("3").activityDescription("3").score(30).build();
+        adminService.addActivityToEmployee("test", "emp", activityIO1);
+        adminService.addActivityToEmployee("test", "emp", activityIO2);
+        adminService.addActivityToEmployee("test", "emp", activityIO3);
+
+        List<ActivityIO> activityIOList = adminService.findByAdminUserNameAndEmployeeUserName("test", "emp");
+        assertEquals(3, activityIOList.size());
+        assertEquals("1" ,activityIOList.get(0).getActivityName());
+        assertEquals("2" ,activityIOList.get(1).getActivityName());
+        assertEquals("3" ,activityIOList.get(2).getActivityName());
+        adminService.deleteActivityFromEmployee("test", "emp", 2);
+        List<ActivityIO> byAdminUserNameAndEmployeeUserName = adminService.findByAdminUserNameAndEmployeeUserName("test", "emp");
+        assertEquals(30, byAdminUserNameAndEmployeeUserName.get(1).getScore());
+    }
+
 }
