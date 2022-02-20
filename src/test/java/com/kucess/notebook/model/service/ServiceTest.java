@@ -9,6 +9,7 @@ import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.ActivityRepo;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,8 @@ class ServiceTest {
             adminService.findAdminByUserName("wrong");
             fail();
         }catch (Exception exception){
-            assertTrue(exception instanceof IllegalArgumentException);
+            assertTrue(exception instanceof UserNameNotFoundException);
+            assertEquals("wrong" ,((UserNameNotFoundException) exception).getUserName());
         }
     }
 

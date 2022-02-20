@@ -5,6 +5,8 @@ import com.kucess.notebook.model.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("${api.path}")
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class AdminController {
     }
 
     @PutMapping("/admins/{userName}")
+    @Transactional
     public void updateAdmin(@RequestBody AdminIO adminIO, @PathVariable String userName){
         adminService.updateAdmin(adminIO, userName);
     }
