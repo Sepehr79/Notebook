@@ -1,5 +1,6 @@
 package com.kucess.notebook.model.service;
 
+import com.kucess.notebook.bussiness.IOUserConvertor;
 import com.kucess.notebook.model.entity.Activity;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
@@ -18,6 +19,8 @@ public class ActivityService {
     private final UserService userService;
 
     private final ActivityRepo activityRepo;
+
+    private final IOUserConvertor ioUserConvertor;
 
     public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
         Employee employee = userService.getEmployeeByUserName(employeeUserName);
@@ -58,8 +61,7 @@ public class ActivityService {
         List<ActivityIO> activityIOList = new ArrayList<>();
         int counter = 1;
         for (Activity activity: activities){
-            ActivityIO activityIO = new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore());
-            activityIO.setAdminUserName(adminUserName);
+            ActivityIO activityIO = ioUserConvertor.activityToIO(activity);
             activityIO.setIndex(counter++);
             activityIOList.add(activityIO);
         }

@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class IOUserConvertor {
 
 
-    public AdminIO adminToIO(Admin admin){
+    public AdminIO adminsToIO(Admin admin){
         return AdminIO.builder()
                 .userName(admin.getUserName())
                 .name(admin.getName())
                 .lastName(admin.getLastName())
-                .employeeIOs(employeeToIO(admin.getEmployees()))
+                .employeeIOs(employeesToIO(admin.getEmployees()))
                 .build();
     }
 
@@ -35,20 +35,20 @@ public class IOUserConvertor {
                 .build();
     }
 
-    public List<EmployeeIO> employeeToIO(List<Employee> employees){
+    public List<EmployeeIO> employeesToIO(List<Employee> employees){
         if (employees != null && !employees.isEmpty()){
             return employees.stream().map(employee -> EmployeeIO.builder()
                     .name(employee.getName())
                     .lastName(employee.getLastName())
                     .userName(employee.getUserName())
-                    .activityIOs(activityToIO(employee.getActivities()))
+                    .activityIOs(activitiesToIO(employee.getActivities()))
                     .build()).collect(Collectors.toList());
         }
         return List.of();
     }
 
 
-    public List<AdminIO> adminToIO(List<Admin> admins){
+    public List<AdminIO> adminsToIO(List<Admin> admins){
         if (admins != null && !admins.isEmpty()){
             return admins.stream().map(admin -> AdminIO.builder().name(admin.getName()).lastName(admin.getLastName()).build()).collect(Collectors.toList());
         }
@@ -58,7 +58,7 @@ public class IOUserConvertor {
     /**
      * @param activities from employee
      */
-    public List<ActivityIO> activityToIO(List<Activity> activities){
+    public List<ActivityIO> activitiesToIO(List<Activity> activities){
         if (activities != null && !activities.isEmpty()){
             return activities.stream().map(activity ->
                     {
@@ -70,5 +70,22 @@ public class IOUserConvertor {
         }
         return List.of();
     }
+
+    public EmployeeIO employeeToIO(Employee employee){
+        return EmployeeIO.builder()
+                .name(employee.getName())
+                .lastName(employee.getLastName())
+                .userName(employee.getUserName())
+                .adminIOS(adminsToIO(employee.getAdmins()))
+                .activityIOs(activitiesToIO(employee.getActivities()))
+                .build();
+    }
+
+    public ActivityIO activityToIO(Activity activity){
+        var activityIo =  new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore());
+        activityIo.setAdminUserName(activity.getAdmin().getUserName());
+        return activityIo;
+    }
+
 
 }

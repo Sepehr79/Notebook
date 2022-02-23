@@ -1,4 +1,4 @@
-package com.kucess.notebook.controller.response;
+package com.kucess.notebook.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,4 @@ import lombok.Setter;
 public abstract class Response {
 
     private String message;
-
-    private String responseType;
-
 }

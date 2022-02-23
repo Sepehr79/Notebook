@@ -1,4 +1,4 @@
-package com.kucess.notebook.controller.response;
+package com.kucess.notebook.model.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExceptionResponse extends Response {
 
+    private String responseType;
+
     public ExceptionResponse(String message, String responseType) {
-        super(message, responseType);
+        super(message);
+        this.responseType = responseType;
     }
 }

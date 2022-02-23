@@ -1,6 +1,6 @@
 package com.kucess.notebook.controller.exception_manager.handler;
 
-import com.kucess.notebook.controller.response.ExceptionResponse;
+import com.kucess.notebook.model.response.ExceptionResponse;
 import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

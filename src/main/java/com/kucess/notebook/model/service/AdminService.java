@@ -54,7 +54,7 @@ public class AdminService extends UserService {
 
     public AdminIO findAdminByUserName(String userName){
         Admin admin = getAdminByUserName(userName);
-        return ioUserConvertor.adminToIO(admin);
+        return ioUserConvertor.adminsToIO(admin);
     }
 
 

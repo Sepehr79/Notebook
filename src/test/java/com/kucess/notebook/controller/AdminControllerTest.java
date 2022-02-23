@@ -1,8 +1,10 @@
 package com.kucess.notebook.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kucess.notebook.controller.response.ExceptionResponse;
+import com.kucess.notebook.model.response.ExceptionResponse;
 import com.kucess.notebook.model.io.AdminIO;
+import com.kucess.notebook.model.response.Message;
+import com.kucess.notebook.model.response.StatusResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,8 @@ class AdminControllerTest {
                 .content(OBJECT_MAPPER.writeValueAsString(adminIO)))
                 .andExpect(status().isOk())
                 .andDo(result -> {
-                    Map map = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), Map.class);
-                    assertEquals("OK", map.get("status"));
+                    StatusResponse response = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class);
+                    assertEquals(Message.ADMIN_REGISTERED, response.getMessage());
                 });
 
         // Update admin
@@ -65,7 +67,12 @@ class AdminControllerTest {
 
         // Delete admin
         perform(delete(URL + "/sample"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(result -> {
+                    Map<String, String> properties = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class)
+                            .getProperties();
+                    assertEquals("sample" ,properties.get("username"));
+                });
 
         // Username not found
         perform(get(URL + "/sample"))

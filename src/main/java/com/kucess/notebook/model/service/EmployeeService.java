@@ -38,13 +38,7 @@ public class EmployeeService extends UserService {
 
     public EmployeeIO findEmployeeByUserName(String userName){
         Employee employee = getEmployeeByUserName(userName);
-        return EmployeeIO.builder()
-                .name(employee.getName())
-                .lastName(employee.getLastName())
-                .userName(employee.getUserName())
-                .adminIOS(ioUserConvertor.adminToIO(employee.getAdmins()))
-                .activityIOs(ioUserConvertor.activityToIO(employee.getActivities()))
-                .build();
+        return ioUserConvertor.employeeToIO(employee);
     }
 
     public void changeEmployeePassword(String userName, String password){
