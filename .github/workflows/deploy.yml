@@ -5,8 +5,14 @@ on:
     branches:
       - master
 
+  workflow_run:
+    workflows: [ "Build" ]
+    types:
+      - completed
+
 jobs:
   deploy:
+    needs:
     runs-on: ubuntu-latest
 
     steps:
