@@ -76,7 +76,6 @@ public class IOUserConvertor {
                 .name(employee.getName())
                 .lastName(employee.getLastName())
                 .userName(employee.getUserName())
-                .adminIOS(adminsToIO(employee.getAdmins()))
                 .activityIOs(activitiesToIO(employee.getActivities()))
                 .build();
     }
