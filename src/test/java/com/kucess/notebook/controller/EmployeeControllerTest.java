@@ -18,8 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-
-import java.util.EmptyStackException;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
