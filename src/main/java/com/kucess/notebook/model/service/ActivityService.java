@@ -16,15 +16,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ActivityService {
 
-    private final UserService userService;
+    private final EmployeeService employeeService;
+
+    private final AdminService adminService;
 
     private final ActivityRepo activityRepo;
 
     private final IOUserConvertor ioUserConvertor;
 
     public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
-        Employee employee = userService.getEmployeeByUserName(employeeUserName);
-        Admin admin = userService.getAdminByUserName(adminUserName);
+        Employee employee = employeeService.getEmployeeByUserName(employeeUserName);
+        Admin admin = adminService.getAdminByUserName(adminUserName);
         Activity activity = Activity.builder()
                 .activityName(activityIO.getActivityName())
                 .score(activityIO.getScore())
@@ -48,8 +50,8 @@ public class ActivityService {
         List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
         Activity activity = activities.get(index - 1);
 
-        Admin admin = userService.getAdminByUserName(adminUserName);
-        Employee employee = userService.getEmployeeByUserName(employeeUserName);
+        Admin admin = adminService.getAdminByUserName(adminUserName);
+        Employee employee = employeeService.getEmployeeByUserName(employeeUserName);
 
         employee.getActivities().remove(activity);
         admin.getActivities().remove(activity);

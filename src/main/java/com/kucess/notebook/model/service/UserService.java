@@ -14,8 +14,7 @@ import java.util.function.Supplier;
 
 @Getter
 @RequiredArgsConstructor
-@Service
-public class UserService {
+public abstract class UserService {
 
     private final AdminRepo adminRepo;
     private final EmployeeRepo employeeRepo;
