@@ -6,7 +6,10 @@ import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.response.Message;
 import com.kucess.notebook.model.response.StatusResponse;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test3")
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AdminControllerTest {
 
     private static final String JSON = "application/json";
@@ -36,34 +40,43 @@ class AdminControllerTest {
 
     private static final String URL = "/notebook/v1/admins";
 
-    @Test
-    void adminControllerCreateReadAndDeleteTest() throws Exception {
-        AdminIO adminIO = AdminIO.builder()
-                .name("AAA")
-                .lastName("BBB")
-                .userName("CCC")
-                .password("DDD")
-                .build();
+    private final static AdminIO ADMIN_IO = AdminIO.builder()
+            .name("AAA")
+            .lastName("BBB")
+            .userName("CCC")
+            .password("DDD")
+            .build();
 
-        // Create new admin user
+    @SneakyThrows
+    @Test
+    @Order(1)
+    void registerAdmin(){
         perform(
-                post(URL).contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(adminIO)),
+                post(URL).contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(ADMIN_IO)),
                 status().isOk(),
                 result -> {
                     StatusResponse response = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class);
                     assertEquals(Message.ADMIN_REGISTERED, response.getMessage());
                 }
         );
+    }
 
-        // Update admin
+    @Test
+    @Order(2)
+    @SneakyThrows
+    void updateAdmin(){
         perform(
                 put(URL + "/CCC").contentType("application/json")
-                        .content(OBJECT_MAPPER.writeValueAsString(adminIO.toBuilder().name("KUCESS").userName("sample").build())),
+                        .content(OBJECT_MAPPER.writeValueAsString(ADMIN_IO.toBuilder().name("KUCESS").userName("sample").build())),
                 status().isOk(),
                 print()
         );
+    }
 
-        // Get admin with updated attributes
+    @Test
+    @Order(3)
+    @SneakyThrows
+    void getAdmin(){
         perform(
                 get(URL + "/sample"),
                 status().isOk(),
@@ -72,8 +85,12 @@ class AdminControllerTest {
                     assertEquals("KUCESS" ,updated.getName());
                 }
         );
+    }
 
-        // Delete admin
+    @Test
+    @Order(4)
+    @SneakyThrows
+    void deleteAdmin(){
         perform(
                 delete(URL + "/sample"),
                 status().isOk(),
@@ -83,8 +100,12 @@ class AdminControllerTest {
                     assertEquals("sample" ,properties.get("username"));
                 }
         );
+    }
 
-        // Username not found
+    @Test
+    @Order(5)
+    @SneakyThrows
+    void onUsernameNotFound(){
         perform(
                 get(URL + "/sample"),
                 status().isBadRequest(),
@@ -93,7 +114,6 @@ class AdminControllerTest {
                     assertEquals(HttpStatus.BAD_REQUEST.name(), exceptionResponse.getResponseType());
                 }
         );
-
     }
 
     @SneakyThrows
