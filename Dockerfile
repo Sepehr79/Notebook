@@ -1,4 +1,4 @@
 FROM openjdk:11
-WORKDIR ./
+WORKDIR /app
 COPY . .
 CMD ["./mvnw", "spring-boot:run"]
