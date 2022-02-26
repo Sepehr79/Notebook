@@ -1,10 +1,14 @@
 package com.kucess.notebook.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kucess.notebook.controller.exception_manager.handler.ApplicationExceptionHandler;
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import com.kucess.notebook.model.response.ExceptionResponse;
 import com.kucess.notebook.model.response.Message;
 import com.kucess.notebook.model.response.StatusResponse;
 import com.kucess.notebook.model.service.ActivityService;
@@ -22,11 +26,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.client.HttpClientErrorException;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,6 +122,62 @@ class ActivityControllerTest {
                 }
         );
     }
+
+    @Test
+    @Order(4)
+    @SneakyThrows
+    void updateActivity(){
+        ACTIVITY_IO.setActivityName("changed");
+        ACTIVITY_IO.setIndex(1);
+        perform(put(PATH.replace("{adm}", "username1").replace("{emp}", "username2"))
+                .contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(ACTIVITY_IO)),
+                status().isOk(),
+                result -> {
+                    StatusResponse statusResponse = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class);
+                    assertEquals(Message.ACTIVITY_UPDATED, statusResponse.getMessage());
+                }
+        );
+    }
+
+    @Test
+    @Order(5)
+    @SneakyThrows
+    void getUpdatedActivity(){
+        perform(get(PATH.replace("{adm}", "username1").replace("{emp}", "username2"))
+                        .contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(ACTIVITY_IO)),
+                status().isOk(),
+                result -> {
+                    JsonNode jsonNode = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), JsonNode.class);
+                    List<ActivityIO> activityIOList = OBJECT_MAPPER.convertValue(jsonNode, new TypeReference<>() {
+                    });
+                    ActivityIO activityIO = activityIOList.get(0);
+                    assertEquals("changed", activityIO.getActivityName());
+                    assertEquals(1, activityIO.getIndex());
+                }
+        );
+    }
+
+    @Test
+    @SneakyThrows
+    @Order(6)
+    void removeActivity(){
+        perform(delete(PATH.replace("{adm}", "username1").replace("{emp}", "username2") + "/1"),
+                status().isOk(),
+                result -> {
+                    StatusResponse statusResponse = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class);
+                    assertEquals(Message.ACTIVITY_REMOVED_FROM_ADMIN, statusResponse.getMessage());
+                }
+        );
+
+        perform(delete(PATH.replace("{adm}", "username1").replace("{emp}", "username2") + "/1"),
+                status().isBadRequest(),
+                result -> {
+                    ExceptionResponse exceptionResponse = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), ExceptionResponse.class);
+                    assertEquals(ApplicationExceptionHandler.INDEX_NOT_FOUND, exceptionResponse.getMessage());
+                }
+        );
+    }
+
 
     @SneakyThrows
     private void perform(MockHttpServletRequestBuilder requestBuilder,
