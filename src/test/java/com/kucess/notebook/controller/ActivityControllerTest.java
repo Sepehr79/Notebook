@@ -7,13 +7,9 @@ import com.kucess.notebook.controller.exception_manager.handler.ApplicationExcep
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
-import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.response.ExceptionResponse;
 import com.kucess.notebook.model.response.Message;
 import com.kucess.notebook.model.response.StatusResponse;
-import com.kucess.notebook.model.service.ActivityService;
-import com.kucess.notebook.model.service.AdminService;
-import com.kucess.notebook.model.service.EmployeeService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -26,10 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,18 +42,6 @@ class ActivityControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    AdminService adminService;
-
-    @Autowired
-    EmployeeService employeeService;
-
-    @Autowired
-    EmployeeRepo employeeRepo;
-
-    @Autowired
-    ActivityService activityService;
 
     private static final AdminIO ADMIN_IO = AdminIO.builder()
             .name("name1")
