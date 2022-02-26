@@ -7,12 +7,14 @@ import com.kucess.notebook.model.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.path}")
+@Transactional
 public class ActivityController {
 
     private final ActivityService activityService;

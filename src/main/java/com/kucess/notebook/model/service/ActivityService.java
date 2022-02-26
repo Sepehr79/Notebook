@@ -25,8 +25,8 @@ public class ActivityService {
     private final IOUserConvertor ioUserConvertor;
 
     public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
-        Employee employee = employeeService.getEmployeeByUserName(employeeUserName);
         Admin admin = adminService.getAdminByUserName(adminUserName);
+        Employee employee = employeeService.getEmployeeByUserName(employeeUserName);
         Activity activity = Activity.builder()
                 .activityName(activityIO.getActivityName())
                 .score(activityIO.getScore())

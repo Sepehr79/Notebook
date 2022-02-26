@@ -21,7 +21,7 @@ public class Employee extends Person {
 	private List<Activity> activities;
 	
 	
-	@ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Admin> admins;
 	
 	

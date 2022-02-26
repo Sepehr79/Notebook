@@ -8,7 +8,6 @@ import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Supplier;
 
