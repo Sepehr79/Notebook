@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
-    public static String INDEX_NOT_FOUND = "Activity index not found";
+    public static final String INDEX_NOT_FOUND = "Activity index not found";
 
     @ExceptionHandler(UserNameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNameNotFound(){
