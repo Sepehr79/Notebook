@@ -3,9 +3,12 @@ package com.kucess.notebook;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kucess.notebook.model.entity.AuthorityType;
+import com.kucess.notebook.model.entity.Person;
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
+import com.kucess.notebook.model.repo.PersonRepo;
 import com.kucess.notebook.model.response.Message;
 import com.kucess.notebook.model.response.StatusResponse;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.datasource.url=jdbc:h2:mem:integ")
 class NotebookApplicationTests {
@@ -28,6 +32,9 @@ class NotebookApplicationTests {
 
 	@Autowired
 	TestRestTemplate testRestTemplate;
+
+	@Autowired
+	PersonRepo personRepo;
 
 	private static final AdminIO ADMIN_IO1 = AdminIO.builder()
 			.name("name1")
@@ -76,6 +83,8 @@ class NotebookApplicationTests {
 				testRestTemplate.postForObject(url, ADMIN_IO1, StatusResponse.class);
 		assertEquals(Message.ADMIN_REGISTERED, statusResponse1.getMessage());
 
+		assertTrue(personRepo.findPersonByUserName(ADMIN_IO1.getUserName()).isPresent());
+
 		testRestTemplate.postForObject(url, ADMIN_IO2, StatusResponse.class);
 
 		StatusResponse statusResponse2 = testRestTemplate.postForObject(url + "/admin1/employees", EMPLOYEE_IO1, StatusResponse.class);
@@ -83,6 +92,15 @@ class NotebookApplicationTests {
 
 		testRestTemplate.postForObject(url + "/admin2/employees", EMPLOYEE_IO2, StatusResponse.class);
 		testRestTemplate.postForObject(url + "/admin2/employees", EMPLOYEE_IO3, StatusResponse.class);
+
+		Person person1 = personRepo.findPersonByUserName(ADMIN_IO1.getUserName()).get();
+		assertEquals(AuthorityType.ADMIN ,person1.getAuthorityType());
+
+		Person person2 = personRepo.findPersonByUserName(EMPLOYEE_IO2.getUserName()).get();
+		assertEquals(AuthorityType.EMPLOYEE, person2.getAuthorityType());
+
+		assertTrue(personRepo.findPersonByUserName(EMPLOYEE_IO2.getUserName()).isPresent());
+		assertTrue(personRepo.findPersonByUserName(EMPLOYEE_IO3.getUserName()).isPresent());
 
 		StatusResponse statusResponse3 = testRestTemplate.postForObject(url + "/admin1/employees/employee1/activities", ACTIVITY_IO1, StatusResponse.class);
 		assertEquals(Message.ACTIVITY_ADDED_TO_EMPLOYEE ,statusResponse3.getMessage());
