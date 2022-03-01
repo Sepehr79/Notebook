@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.httpBasic().and().csrf().ignoringAntMatchers("/notebook/v1/admins/**")
-                        .and()
+        httpSecurity.httpBasic().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/notebook/v1/admins/{username}/**").access("@authorizationGuard.checkUserId(authentication, #username)")
                 .antMatchers("/notebook/v1/admins/**").hasAuthority(AuthorityType.ADMIN.name());
