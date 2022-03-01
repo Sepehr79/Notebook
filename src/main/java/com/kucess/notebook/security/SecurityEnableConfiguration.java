@@ -28,7 +28,7 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable().httpBasic()
+        httpSecurity.httpBasic().and().csrf().ignoringAntMatchers("/notebook/v1/admins/**")
                         .and()
                 .authorizeRequests()
                 .antMatchers("/notebook/v1/admins/{username}/**").access("@authorizationGuard.checkUserId(authentication, #username)")
