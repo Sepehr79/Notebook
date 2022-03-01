@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class PersonDetails implements UserDetails {
 
-    private final Person person;
+    private final transient Person person;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
