@@ -85,7 +85,7 @@ class ServiceTest {
     @Test
     @Transactional
     void addEmployeeToAdminTest(){
-        employeeService.addEmployeeToAdmin("test", EmployeeIO.builder().userName("emp").name("kucess").build());
+        employeeService.addEmployeeToAdmin("test", EmployeeIO.builder().userName("emp").name("kucess").password("1234").build());
         Optional<Employee> employeeOptional = employeeRepo.findByUserName("emp");
         assertTrue(employeeOptional.isPresent());
         assertEquals("kucess" ,employeeOptional.get().getName());
