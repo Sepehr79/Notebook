@@ -6,6 +6,7 @@ import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,9 +14,12 @@ public class AdminService extends UserService {
 
     private final IOUserConvertor ioUserConvertor;
 
-    public AdminService(AdminRepo adminRepo, EmployeeRepo employeeRepo, IOUserConvertor ioUserConvertor) {
+    private final PasswordEncoder passwordEncoder;
+
+    public AdminService(AdminRepo adminRepo, EmployeeRepo employeeRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
         super(adminRepo, employeeRepo);
         this.ioUserConvertor = ioUserConvertor;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -26,7 +30,7 @@ public class AdminService extends UserService {
                 .name(adminIO.getName())
                 .lastName(adminIO.getLastName())
                 .userName(adminIO.getUserName())
-                .password(adminIO.getPassword())
+                .password(passwordEncoder.encode(adminIO.getPassword()))
                 .authorityType(AuthorityType.ADMIN)
                 .build();
         super.getAdminRepo().save(admin);
@@ -40,7 +44,7 @@ public class AdminService extends UserService {
         admin.setName(adminIO.getName());
         admin.setLastName(adminIO.getLastName());
         admin.setUserName(adminIO.getUserName());
-        admin.setPassword(adminIO.getPassword());
+        admin.setPassword(passwordEncoder.encode(adminIO.getPassword()));
     }
 
     /**
