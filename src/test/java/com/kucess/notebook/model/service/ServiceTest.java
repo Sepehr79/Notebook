@@ -2,6 +2,7 @@ package com.kucess.notebook.model.service;
 
 import com.kucess.notebook.model.entity.Activity;
 import com.kucess.notebook.model.entity.Admin;
+import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.AdminIO;
@@ -10,19 +11,25 @@ import com.kucess.notebook.model.repo.ActivityRepo;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.kucess.notebook.security.PersonDetailsService;
+import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test3")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ServiceTest {
 
     @Autowired
@@ -41,7 +48,13 @@ class ServiceTest {
     ActivityRepo activityRepo;
 
     @Autowired
+    PersonDetailsService personDetailsService;
+
+    @Autowired
     AdminRepo adminRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     private static final AdminIO ADMIN_IO = AdminIO.builder()
             .name("kuc")
@@ -85,10 +98,27 @@ class ServiceTest {
     @Test
     @Transactional
     void addEmployeeToAdminTest(){
-        employeeService.addEmployeeToAdmin("test", EmployeeIO.builder().userName("emp").name("kucess").build());
+
+        employeeService.addEmployeeToAdmin("test", EmployeeIO.builder().userName("emp").name("kucess").password("1234").build());
         Optional<Employee> employeeOptional = employeeRepo.findByUserName("emp");
         assertTrue(employeeOptional.isPresent());
         assertEquals("kucess" ,employeeOptional.get().getName());
+
+        UserDetails userDetails = personDetailsService.loadUserByUsername("test");
+        GrantedAuthority grantedAuthority = userDetails.getAuthorities().stream().findFirst().get();
+        assertEquals(grantedAuthority.getAuthority(), AuthorityType.ADMIN.name());
+
+        UserDetails empDetails = personDetailsService.loadUserByUsername("emp");
+        assertEquals(AuthorityType.EMPLOYEE.name(), empDetails.getAuthorities().stream().findFirst().get().getAuthority());
+
+        assertTrue(passwordEncoder.matches("1234", empDetails.getPassword()));
+
+        try {
+            personDetailsService.loadUserByUsername("wrong");
+            fail();
+        }catch (Exception exception){
+            assertTrue(exception instanceof UserNameNotFoundException);
+        }
 
         AdminIO adminIO = adminService.findAdminByUserName(ADMIN_IO.getUserName());
         assertEquals(1 ,adminIO.getEmployeeIOs().size());

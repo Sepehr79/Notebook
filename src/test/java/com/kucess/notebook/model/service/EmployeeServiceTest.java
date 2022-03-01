@@ -5,8 +5,11 @@ import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +23,9 @@ class EmployeeServiceTest {
 
     @Autowired
     EmployeeRepo employeeRepo;
+
+    @MockBean
+    PasswordEncoder passwordEncoder;
 
     private static final Employee EMPLOYEE = Employee.builder()
             .name("kuc")
@@ -38,6 +44,8 @@ class EmployeeServiceTest {
     void testGetEmployeeAndChangePassword(){
         EmployeeIO employee = employeeService.findEmployeeByUserName("kucess");
         assertEquals("kuc" ,employee.getName());
+
+        Mockito.when(passwordEncoder.encode("change")).thenReturn("change");
 
         employeeService.changeEmployeePassword("kucess", "change");
         assertEquals("change" ,employeeRepo.findByUserName("kucess").get().getPassword());
