@@ -5,4 +5,4 @@
 
 Notebook developed to record the activities of members of the Computer Engineering Association.
 
-(deploy_on_arvan_cloud)[https://notebook-kucess.apps.ir-thr-at1.arvan.run/notebook/v1/employees]
+[deployed on arvan cloud](https://notebook-kucess.apps.ir-thr-at1.arvan.run/notebook/v1/employees)
