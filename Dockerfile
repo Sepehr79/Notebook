@@ -1,4 +1,4 @@
 FROM openjdk:11
-WORKDIR /app
+WORKDIR ./app
 COPY . .
-ENTRYPOINT ["./app/mvnw", "spring-boot:run"]
+ENTRYPOINT ["./mvnw", "spring-boot:run"]
