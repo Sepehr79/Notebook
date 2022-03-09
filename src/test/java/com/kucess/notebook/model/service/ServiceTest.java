@@ -12,13 +12,15 @@ import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import com.kucess.notebook.security.PersonDetailsService;
-import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
@@ -26,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:test3")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -83,8 +84,8 @@ class ServiceTest {
             adminService.findAdminByUserName("wrong");
             fail();
         }catch (Exception exception){
+            System.out.println(exception.getClass().getName());
             assertTrue(exception instanceof UserNameNotFoundException);
-            assertEquals("wrong" ,((UserNameNotFoundException) exception).getUserName());
         }
     }
 
@@ -117,7 +118,7 @@ class ServiceTest {
             personDetailsService.loadUserByUsername("wrong");
             fail();
         }catch (Exception exception){
-            assertTrue(exception instanceof UserNameNotFoundException);
+            assertTrue(exception instanceof UsernameNotFoundException);
         }
 
         AdminIO adminIO = adminService.findAdminByUserName(ADMIN_IO.getUserName());

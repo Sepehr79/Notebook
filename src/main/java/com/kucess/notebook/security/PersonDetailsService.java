@@ -1,7 +1,6 @@
 package com.kucess.notebook.security;
 
 import com.kucess.notebook.model.repo.PersonRepo;
-import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +19,6 @@ public class PersonDetailsService implements UserDetailsService {
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new PersonDetails(personRepo.findPersonByUserName(username).orElseThrow((Supplier<Throwable>) () -> new UserNameNotFoundException(username)));
+        return new PersonDetails(personRepo.findPersonByUserName(username).orElseThrow((Supplier<Throwable>) () -> new UsernameNotFoundException("User not found with the given username: " + username)));
     }
 }

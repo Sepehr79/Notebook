@@ -46,6 +46,8 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.POST,"/notebook/v1/admins");
+        web.ignoring().antMatchers(HttpMethod.POST,"/notebook/v1/admins")
+                .and()
+                .ignoring().antMatchers("/actuator/**");
     }
 }
