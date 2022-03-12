@@ -1,6 +1,7 @@
 package com.kucess.notebook.controller.exception_manager.handler;
 
 import com.kucess.notebook.model.response.ExceptionResponse;
+import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,14 @@ public class ApplicationExceptionHandler {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(
                 new ExceptionResponse(INDEX_NOT_FOUND, httpStatus.name()), httpStatus
+        );
+    }
+
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateUsername(DuplicateUsernameException duplicateUsernameException){
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(
+                new ExceptionResponse(duplicateUsernameException.getMessage() ,httpStatus.name()), httpStatus
         );
     }
 
