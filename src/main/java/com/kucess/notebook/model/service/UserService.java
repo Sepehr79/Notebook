@@ -2,8 +2,13 @@ package com.kucess.notebook.model.service;
 
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
+import com.kucess.notebook.model.entity.Person;
+import com.kucess.notebook.model.io.AdminIO;
+import com.kucess.notebook.model.io.UserIO;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import com.kucess.notebook.model.repo.PersonRepo;
+import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,7 @@ public abstract class UserService {
 
     private final AdminRepo adminRepo;
     private final EmployeeRepo employeeRepo;
+    private final PersonRepo personRepo;
 
     @SneakyThrows
     public Admin getAdminByUserName(String userName){
@@ -29,5 +35,10 @@ public abstract class UserService {
         return employeeRepo.findByUserName(adminUserName)
                 .orElseThrow((Supplier<Throwable>) () -> new UserNameNotFoundException(adminUserName));
     }
+
+    public boolean existsByUsername(String username){
+        return personRepo.existsByUserName(username);
+    }
+
 
 }

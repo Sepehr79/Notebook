@@ -5,6 +5,7 @@ import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import com.kucess.notebook.model.response.ExceptionResponse;
 import com.kucess.notebook.model.response.Message;
 import com.kucess.notebook.model.response.StatusResponse;
 import com.kucess.notebook.model.service.AdminService;
@@ -80,7 +81,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    @Order(1)
+    @Order(0)
     @SneakyThrows
     void addNewEmployee(){
         perform(post(ADMINS_PATH.replace("?", "KUCESS"))
@@ -92,6 +93,21 @@ class EmployeeControllerTest {
                     assertEquals("KUCESS" ,statusResponse.getProperties().get("admin"));
                     assertEquals("employee2" ,statusResponse.getProperties().get("employee"));
                 });
+    }
+
+    @Test
+    @Order(1)
+    @SneakyThrows
+    void duplicateEmployeeUsername(){
+        perform(post(ADMINS_PATH.replace("?", "KUCESS"))
+                .contentType("application/json")
+                .content(OBJECT_MAPPER.writeValueAsString(EMPLOYEE_IO2.toBuilder().lastName("Another").build())),
+                status().isBadRequest(),
+                result -> {
+                    ExceptionResponse exceptionResponse = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), ExceptionResponse.class);
+                    assertEquals("Username already taken: employee2", exceptionResponse.getMessage());
+                }
+        );
     }
 
     @Test

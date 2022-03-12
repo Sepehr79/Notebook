@@ -6,6 +6,9 @@ import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
+import com.kucess.notebook.model.repo.PersonRepo;
+import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +19,8 @@ public class AdminService extends UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public AdminService(AdminRepo adminRepo, EmployeeRepo employeeRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
-        super(adminRepo, employeeRepo);
+    public AdminService(AdminRepo adminRepo, EmployeeRepo employeeRepo, PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
+        super(adminRepo, employeeRepo, personRepo);
         this.ioUserConvertor = ioUserConvertor;
         this.passwordEncoder = passwordEncoder;
     }
@@ -25,7 +28,10 @@ public class AdminService extends UserService {
     /**
      * Register new admin
      */
+    @SneakyThrows
     public void saveAdmin(AdminIO adminIO){
+        if (existsByUsername(adminIO.getUserName()))
+            throw new DuplicateUsernameException(adminIO.getUserName());
         Admin admin = Admin.builder()
                 .name(adminIO.getName())
                 .lastName(adminIO.getLastName())
