@@ -18,7 +18,7 @@ public class EmployeeService extends UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public EmployeeService(PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder, PersonRepo personRepo1) {
+    public EmployeeService(PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
         super(personRepo);
         this.ioUserConvertor = ioUserConvertor;
         this.passwordEncoder = passwordEncoder;
