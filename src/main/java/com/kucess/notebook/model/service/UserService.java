@@ -1,12 +1,7 @@
 package com.kucess.notebook.model.service;
 
-import com.kucess.notebook.model.entity.Admin;
-import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.entity.Person;
-import com.kucess.notebook.model.repo.AdminRepo;
-import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.repo.PersonRepo;
-import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

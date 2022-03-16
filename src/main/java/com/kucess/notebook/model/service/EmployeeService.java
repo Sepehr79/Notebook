@@ -4,8 +4,6 @@ import com.kucess.notebook.bussiness.IOUserConvertor;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.EmployeeIO;
-import com.kucess.notebook.model.repo.AdminRepo;
-import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.repo.PersonRepo;
 import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import lombok.SneakyThrows;

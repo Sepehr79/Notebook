@@ -17,13 +17,7 @@ import java.util.List;
 public class ActivityService {
 
     private final UserService userService;
-
-    private final EmployeeService employeeService;
-
-    private final AdminService adminService;
-
     private final ActivityRepo activityRepo;
-
     private final IOUserConvertor ioUserConvertor;
 
     public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
