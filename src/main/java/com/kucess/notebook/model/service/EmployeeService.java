@@ -20,8 +20,8 @@ public class EmployeeService extends UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public EmployeeService(EmployeeRepo employeeRepo, AdminRepo adminRepo, PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder, PersonRepo personRepo1) {
-        super(adminRepo, employeeRepo, personRepo);
+    public EmployeeService(PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder, PersonRepo personRepo1) {
+        super(personRepo);
         this.ioUserConvertor = ioUserConvertor;
         this.passwordEncoder = passwordEncoder;
     }
@@ -30,32 +30,32 @@ public class EmployeeService extends UserService {
     public void addEmployeeToAdmin(String adminUserName, EmployeeIO employeeIO){
         if (existsByUsername(employeeIO.getUserName()))
             throw new DuplicateUsernameException(employeeIO.getUserName());
-        Admin admin = getAdminByUserName(adminUserName);
+        Admin admin = (Admin) getUserByUserName(adminUserName);
         String password = employeeIO.getPassword();
         employeeIO.setPassword(passwordEncoder.encode(password));
         admin.addEmployee(ioUserConvertor.iOToEmployee(employeeIO));
     }
 
     public void addEmployeeToAdmin(String adminUserName, String employeeUserName){
-        Admin admin = getAdminByUserName(adminUserName);
-        Employee employee = getEmployeeByUserName(employeeUserName);
+        Admin admin = (Admin) getUserByUserName(adminUserName);
+        Employee employee = (Employee) getUserByUserName(employeeUserName);
         admin.addEmployee(employee);
     }
 
     public void removeEmployeeFromAdmin(String adminUserName, String employeeUserName){
-        Admin admin = getAdminByUserName(adminUserName);
-        Employee employee = getEmployeeByUserName(employeeUserName);
+        Admin admin = (Admin) getUserByUserName(adminUserName);
+        Employee employee = (Employee) getUserByUserName(employeeUserName);
         admin.getEmployees().remove(employee);
     }
 
     public EmployeeIO findEmployeeByUserName(String userName){
-        Employee employee = getEmployeeByUserName(userName);
+        Employee employee = (Employee) getUserByUserName(userName);
         return ioUserConvertor.employeeToIO(employee);
     }
 
     public void changeEmployeePassword(String userName, String password){
-        Employee employee = getEmployeeByUserName(userName);
-        super.getEmployeeRepo().save(
+        Employee employee = (Employee) getUserByUserName(userName);
+        super.getPersonRepo().save(
                 employee.toBuilder().password(passwordEncoder.encode(password)).build()
         );
     }

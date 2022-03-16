@@ -10,7 +10,6 @@ import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.ActivityRepo;
 import com.kucess.notebook.model.repo.AdminRepo;
 import com.kucess.notebook.model.repo.EmployeeRepo;
-import com.kucess.notebook.model.service.exception.UserNameNotFoundException;
 import com.kucess.notebook.security.PersonDetailsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +84,7 @@ class ServiceTest {
             fail();
         }catch (Exception exception){
             System.out.println(exception.getClass().getName());
-            assertTrue(exception instanceof UserNameNotFoundException);
+            assertTrue(exception instanceof UsernameNotFoundException);
         }
     }
 
