@@ -51,7 +51,7 @@ class AdminControllerTest {
 
     @SneakyThrows
     @Test
-    @Order(1)
+    @Order(0)
     void registerAdmin(){
         perform(
                 post(URL).contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(ADMIN_IO)),
@@ -59,6 +59,20 @@ class AdminControllerTest {
                 result -> {
                     StatusResponse response = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), StatusResponse.class);
                     assertEquals(Message.ADMIN_REGISTERED, response.getMessage());
+                }
+        );
+    }
+
+    @Test
+    @Order(1)
+    @SneakyThrows
+    void duplicateUsername(){
+        perform(
+                post(URL).contentType(JSON).content(OBJECT_MAPPER.writeValueAsString(ADMIN_IO.toBuilder().name("Another").build())),
+                status().isBadRequest(),
+                result -> {
+                    ExceptionResponse response = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), ExceptionResponse.class);
+                    assertEquals("Username already taken: CCC" ,response.getMessage());
                 }
         );
     }
