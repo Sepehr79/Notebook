@@ -1,6 +1,7 @@
 package com.kucess.notebook.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.io.EmployeeIO;
@@ -158,6 +159,20 @@ class EmployeeControllerTest {
 
     @Test
     @Order(5)
+    @SneakyThrows
+    void testEmployeeRemovedFromAdmin(){
+        perform(
+                get(ADMINS_PATH.replace("?", "KUCESS").replace("/employees", "")),
+                status().isOk(),
+                result -> {
+                    AdminIO adminIO = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), AdminIO.class);
+                    assertEquals(0 ,adminIO.getEmployeeIOs().size());
+                }
+        );
+    }
+
+    @Test
+    @Order(6)
     @SneakyThrows
     void addCurrentEmployee(){
         employeeRepo.save(Employee.builder()

@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.path}")
+@Transactional
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -21,7 +22,6 @@ public class EmployeeController {
     private static final String ADMIN = "admin";
 
     @PostMapping("/admins/{userName}/employees")
-    @Transactional
     public StatusResponse addEmployeeToAdmin(@RequestBody EmployeeIO employeeIO, @PathVariable String userName){
         employeeService.addEmployeeToAdmin(userName ,employeeIO);
         return new StatusResponse(Message.EMPLOYEE_ADD_TOO_ADMIN, Map.of(ADMIN, userName, EMPLOYEE, employeeIO.getUserName()));

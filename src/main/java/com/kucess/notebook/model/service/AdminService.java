@@ -4,8 +4,6 @@ import com.kucess.notebook.bussiness.IOUserConvertor;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.io.AdminIO;
-import com.kucess.notebook.model.repo.AdminRepo;
-import com.kucess.notebook.model.repo.EmployeeRepo;
 import com.kucess.notebook.model.repo.PersonRepo;
 import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import lombok.SneakyThrows;
@@ -19,8 +17,8 @@ public class AdminService extends UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public AdminService(AdminRepo adminRepo, EmployeeRepo employeeRepo, PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
-        super(adminRepo, employeeRepo, personRepo);
+    public AdminService(PersonRepo personRepo, IOUserConvertor ioUserConvertor, PasswordEncoder passwordEncoder) {
+        super(personRepo);
         this.ioUserConvertor = ioUserConvertor;
         this.passwordEncoder = passwordEncoder;
     }
@@ -39,14 +37,14 @@ public class AdminService extends UserService {
                 .password(passwordEncoder.encode(adminIO.getPassword()))
                 .authorityType(AuthorityType.ADMIN)
                 .build();
-        super.getAdminRepo().save(admin);
+        super.getPersonRepo().save(admin);
     }
 
     /**
      * Update admin
      */
     public void updateAdmin(AdminIO adminIO, String userName){
-        Admin admin = getAdminByUserName(userName);
+        Admin admin = (Admin) getUserByUserName(userName);
         admin.setName(adminIO.getName());
         admin.setLastName(adminIO.getLastName());
         admin.setUserName(adminIO.getUserName());
@@ -57,15 +55,17 @@ public class AdminService extends UserService {
      * Delete admin
      */
     public void deleteAdminByUserName(String userName){
-        super.getAdminRepo().delete(
-                getAdminByUserName(userName)
+        super.getPersonRepo().delete(
+                getUserByUserName(userName)
         );
     }
 
     public AdminIO findAdminByUserName(String userName){
-        Admin admin = getAdminByUserName(userName);
+        Admin admin = (Admin) getUserByUserName(userName);
         return ioUserConvertor.adminsToIO(admin);
     }
+
+
 
 
 
