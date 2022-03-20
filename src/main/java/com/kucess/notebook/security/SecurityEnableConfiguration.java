@@ -32,6 +32,7 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .mvcMatchers("/notebook/v1/welcome").authenticated()
+                .mvcMatchers("/notebook/v1/employees/**").hasAnyAuthority("ADMIN")
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/signup").permitAll();
 
