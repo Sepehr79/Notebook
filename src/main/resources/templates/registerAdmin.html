@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+    <h3>Register new admin</h3>
+    <form th:object="${user}" th:method="post" th:href="@{/notebook/v1/admins}">
+        <table>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <tr>
+                <td>name: </td>
+                <td>
+                    <label>
+                        <input type="text" th:field="*{name}">
+                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    lastname:
+                </td>
+                <td>
+                    <label>
+                        <input type="text" th:field="*{lastName}">
+                        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    username:
+                </td>
+                <td>
+                    <label>
+                        <input type="text" th:field="*{userName}">
+                        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    password:
+                </td>
+                <td>
+                    <label>
+                        <input type="password" th:field="*{password}">
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input id="button" type="submit" value="Register">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</body>
+</html>

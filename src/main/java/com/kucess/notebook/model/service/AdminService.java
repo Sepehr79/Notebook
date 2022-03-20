@@ -1,6 +1,6 @@
 package com.kucess.notebook.model.service;
 
-import com.kucess.notebook.bussiness.IOUserConvertor;
+import com.kucess.notebook.bussiness.convertor.IOUserConvertor;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.io.AdminIO;

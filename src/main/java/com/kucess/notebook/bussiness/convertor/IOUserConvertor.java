@@ -1,4 +1,4 @@
-package com.kucess.notebook.bussiness;
+package com.kucess.notebook.bussiness.convertor;
 
 import com.kucess.notebook.model.entity.Activity;
 import com.kucess.notebook.model.entity.Admin;

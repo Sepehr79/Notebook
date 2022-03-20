@@ -1,0 +1,54 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+</head>
+<body>
+
+    <h3>Welcome</h3>
+    <hr />
+    <div th:if="${user.authorityType == T(com.kucess.notebook.model.entity.AuthorityType).ADMIN}">
+
+        <table>
+            <tr>
+                <td>
+                    name:
+                </td>
+                <td th:text="*{user.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    lastname:
+                </td>
+                <td th:text="*{user.lastName}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    username:
+                </td>
+                <td th:text="*{user.userName}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    role:
+                </td>
+                <td th:text="*{user.authorityType.toString()}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    employees
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+    <div th:if="${user.authorityType == T(com.kucess.notebook.model.entity.AuthorityType).EMPLOYEE}">
+        Hello user
+    </div>
+</body>
+</html>

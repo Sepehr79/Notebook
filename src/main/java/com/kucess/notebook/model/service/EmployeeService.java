@@ -1,17 +1,14 @@
 package com.kucess.notebook.model.service;
 
-import com.kucess.notebook.bussiness.IOUserConvertor;
+import com.kucess.notebook.bussiness.convertor.IOUserConvertor;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.Employee;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.repo.PersonRepo;
 import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import lombok.SneakyThrows;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.function.Supplier;
 
 
 @Service
