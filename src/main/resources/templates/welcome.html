@@ -45,12 +45,16 @@
                 <td>name</td>
                 <td>lastname</td>
                 <td>username</td>
+                <td>activities</td>
                 <td>delete</td>
             </tr>
             <tr th:each="emp: ${employees}">
                 <td th:text="${emp.name}"></td>
                 <td th:text="${emp.lastName}"></td>
                 <td th:text="${emp.userName}"></td>
+                <td>
+                    <a th:href="@{/notebook/v1/employees/{userName}/activities(userName=${emp.userName})}">activities</a>
+                </td>
                 <td>
                     <form th:method="post"
                           th:action="@{/notebook/v1/employees/{userName}(userName=${emp.userName})}">

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form th:object="${activity}"
+          th:method="post"
+          th:action="@{/notebook/v1/employees/{empUserName}/activities/insert(empUserName=${employeeUserName})}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <label>
+            <input type="text" th:field="*{activityName}">
+        </label>
+        <label>
+            <input type="text" th:field="*{activityDescription}">
+        </label>
+        <label>
+            <input type="number" th:field="*{score}">
+        </label>
+        <label>
+            <input type="submit" value="add">
+        </label>
+    </form>
+
+</body>
+</html>

@@ -26,7 +26,7 @@ public class RegisterController {
     }
 
     @PostMapping("/signup")
-    public String registerAdmin(@ModelAttribute("user") @Valid AdminIO userIO, BindingResult bindingResult, Model model){
+    public String registerAdmin(@ModelAttribute("user") @Valid AdminIO userIO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "registerAdmin";
         }
