@@ -21,10 +21,12 @@
             <td th:text="${act.activityName}"></td>
             <td th:text="${act.activityDescription}"></td>
             <td th:text="${act.score}"></td>
-            <td></td>
+            <td>
+                <a th:href="@{/notebook/v1/employees/{empUserName}/activities/{actId}(empUserName=${empUserName}, actId=${act.getId})}">Update</a>
+            </td>
             <td>
                 <form th:method="post"
-                      th:action="@{/notebook/v1/employees/{empUserName}/activities/{actIndex}/delete(empUserName=${empUserName}, actIndex=${act.index})}">
+                      th:action="@{/notebook/v1/employees/{empUserName}/activities/{actIndex}/delete(empUserName=${empUserName}, actIndex=${act.getId})}">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:action="${_csrf.token}">
                     <input type="submit" value="delete">
                 </form>

@@ -105,15 +105,25 @@ public class HomePageController {
             return "insertActivity";
         }
         String adminUserName = authentication.getName();
-        activityService.addActivityToEmployee(adminUserName, employeeUserName, activityIO);
+        if (activityIO.getId() == 0)
+            activityService.addActivityToEmployee(adminUserName, employeeUserName, activityIO);
+        else
+            activityService.updateActivity(activityIO);
         return "redirect:/notebook/v1/employees/" + employeeUserName + "/activities";
     }
 
-    @PostMapping("/employees/{empUserName}/activities/{actIndex}/delete")
-    public String deleteActivity(@PathVariable String empUserName, @PathVariable String actIndex, Authentication authentication){
-        String adminUserName = authentication.getName();
-        activityService.deleteActivityFromEmployee(adminUserName, empUserName, Integer.parseInt(actIndex));
+    @PostMapping("/employees/{empUserName}/activities/{actId}/delete")
+    public String deleteActivity(@PathVariable String actId, @PathVariable String empUserName){
+        activityService.deleteActivityFromEmployee(Long.parseLong(actId));
         return "redirect:/notebook/v1/employees/" + empUserName + "/activities";
+    }
+
+    @GetMapping("/employees/{empUserName}/activities/{actId}")
+    public String getUpdatingActivity(@PathVariable String empUserName, @PathVariable String actId, Model model){
+        ActivityIO activityById = activityService.findActivityById(Long.parseLong(actId));
+        model.addAttribute("activity", activityById);
+        model.addAttribute("employeeUserName", empUserName);
+        return "insertActivity";
     }
 
 }

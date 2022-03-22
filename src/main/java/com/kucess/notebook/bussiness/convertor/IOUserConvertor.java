@@ -83,6 +83,7 @@ public class IOUserConvertor {
     public ActivityIO activityToIO(Activity activity){
         var activityIo =  new ActivityIO(activity.getActivityName(), activity.getActivityDescription(), activity.getScore());
         activityIo.setAdminUserName(activity.getAdmin().getUserName());
+        activityIo.setId(activity.getId());
         return activityIo;
     }
 

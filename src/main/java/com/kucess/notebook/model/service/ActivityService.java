@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,15 @@ public class ActivityService {
     private final UserService userService;
     private final ActivityRepo activityRepo;
     private final IOUserConvertor ioUserConvertor;
+
+    public void updateActivity(ActivityIO activityIO){
+        Optional<Activity> byId = activityRepo.findById(activityIO.getId());
+        if (byId.isEmpty())
+            throw new IllegalArgumentException();
+        byId.get().setActivityName(activityIO.getActivityName());
+        byId.get().setActivityDescription(activityIO.getActivityDescription());
+        byId.get().setScore(activityIO.getScore());
+    }
 
     public void addActivityToEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
         Admin admin = (Admin) userService.getUserByUserName(adminUserName);
@@ -34,36 +44,36 @@ public class ActivityService {
         admin.addActivity(activity);
     }
 
-    public void updateActivityFromEmployee(String adminUserName, String employeeUserName, ActivityIO activityIO){
-        List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
-        Activity activity = activities.get(activityIO.getIndex() - 1);
+    public void updateActivityFromEmployee(ActivityIO activityIO){
+        Optional<Activity> activityOptional = activityRepo.findById(activityIO.getId());
+        if (activityOptional.isEmpty())
+            throw new IllegalArgumentException("Activity not found");
+        Activity activity = activityOptional.get();
         activity.setActivityName(activityIO.getActivityName());
         activity.setActivityDescription(activityIO.getActivityDescription());
         activity.setScore(activityIO.getScore());
     }
 
-    public void deleteActivityFromEmployee(String adminUserName, String employeeUserName, int index){
-        List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
-        Activity activity = activities.get(index - 1);
-
-        Admin admin = (Admin) userService.getUserByUserName(adminUserName);
-        Employee employee = (Employee) userService.getUserByUserName(employeeUserName);
-
-        employee.getActivities().remove(activity);
-        admin.getActivities().remove(activity);
-        activityRepo.deleteById(activity.getId());
+    public void deleteActivityFromEmployee(long id){
+        activityRepo.deleteById(id);
     }
 
     public List<ActivityIO> findActivityByAdminUserNameAndEmployeeUserName(String adminUserName, String employeeUserName){
         List<Activity> activities = activityRepo.findByAdminAndEmployee(adminUserName, employeeUserName);
         List<ActivityIO> activityIOList = new ArrayList<>();
-        int counter = 1;
         for (Activity activity: activities){
             ActivityIO activityIO = ioUserConvertor.activityToIO(activity);
-            activityIO.setIndex(counter++);
+            activityIO.setId(activity.getId());
             activityIOList.add(activityIO);
         }
         return activityIOList;
+    }
+
+    public ActivityIO findActivityById(long id){
+        Optional<Activity> activity = activityRepo.findById(id);
+        if (activity.isEmpty())
+            throw new IllegalArgumentException("Activity not found");
+        return ioUserConvertor.activityToIO(activity.get());
     }
 
 }

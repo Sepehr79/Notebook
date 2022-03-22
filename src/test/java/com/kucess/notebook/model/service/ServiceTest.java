@@ -170,14 +170,14 @@ class ServiceTest {
         ActivityIO activityIO = activities.stream().findFirst().get();
         assertEquals(1, activities.size());
         assertEquals(activity.getActivityName(), activityIO.getActivityName());
-        assertEquals(1 ,activityIO.getIndex());
+        assertEquals(1 ,activityIO.getId());
 
         activityIO.setScore(20);
-        activityService.updateActivityFromEmployee("test", "emp", activityIO);
+        activityService.updateActivityFromEmployee(activityIO);
         assertEquals(20 ,employeeRepo.findByUserName("emp").get().getActivities().stream().findFirst().get().getScore());
 
 
-        activityService.deleteActivityFromEmployee("test", "emp", 1);
+        activityService.deleteActivityFromEmployee(1);
         assertEquals(0 ,employeeRepo.findByUserName("emp").get().getActivities().size());
         assertFalse(activityRepo.findAll().iterator().hasNext());
         assertEquals(0, adminRepo.findByUserName("test").get().getActivities().size());
@@ -199,7 +199,7 @@ class ServiceTest {
         assertEquals("1" ,activityIOList.get(0).getActivityName());
         assertEquals("2" ,activityIOList.get(1).getActivityName());
         assertEquals("3" ,activityIOList.get(2).getActivityName());
-        activityService.deleteActivityFromEmployee("test", "emp", 2);
+        activityService.deleteActivityFromEmployee(2);
         List<ActivityIO> byAdminUserNameAndEmployeeUserName = activityService.findActivityByAdminUserNameAndEmployeeUserName("test", "emp");
         assertEquals(30, byAdminUserNameAndEmployeeUserName.get(1).getScore());
     }
