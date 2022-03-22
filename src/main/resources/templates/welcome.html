@@ -77,6 +77,20 @@
     </div>
     <div th:if="${user.authorityType == T(com.kucess.notebook.model.entity.AuthorityType).EMPLOYEE}">
         Hello user
+        <table>
+            <tr>
+                <td>activity name</td>
+                <td>activity description</td>
+                <td>activity score</td>
+                <td>admin username</td>
+            </tr>
+            <tr th:each="act: ${activities}">
+                <td th:text="*{act.activityName}"></td>
+                <td th:text="*{act.activityDescription}"></td>
+                <td th:text="*{act.score}"></td>
+                <td th:text="*{act.admin.userName}"></td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

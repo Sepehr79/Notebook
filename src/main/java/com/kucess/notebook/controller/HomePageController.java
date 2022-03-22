@@ -31,6 +31,7 @@ public class HomePageController {
     private final ActivityService activityService;
 
     @GetMapping("/welcome")
+    @Transactional
     public String findUser(Authentication authentication, Model model){
         Person person = userService.getUserByUserName(authentication.getName());
         model.addAttribute("user", person);
