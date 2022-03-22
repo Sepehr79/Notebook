@@ -8,9 +8,11 @@ import com.kucess.notebook.model.service.EmployeeService;
 import com.kucess.notebook.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -68,6 +70,17 @@ public class HomePageController {
     public String removeEmployeeFromAdmin(@PathVariable("employeeUserName") String username, Authentication authentication){
         String adminUserName = authentication.getName();
         employeeService.removeEmployeeFromAdmin(adminUserName, username);
+        return "redirect:/notebook/v1/welcome";
+    }
+
+    @PostMapping("/employees/insertCurrent")
+    @Transactional
+    public String addCurrentEmployee(@RequestParam("userName") String userName, Authentication authentication){
+        try {
+            employeeService.addEmployeeToAdmin(authentication.getName(), userName);
+        }catch (UsernameNotFoundException usernameNotFoundException){
+            usernameNotFoundException.printStackTrace();
+        }
         return "redirect:/notebook/v1/welcome";
     }
 
