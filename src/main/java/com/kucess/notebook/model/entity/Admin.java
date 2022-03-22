@@ -7,7 +7,9 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("ADM")
@@ -23,7 +25,7 @@ public class Admin extends Person {
 
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinTable(name = "admin_employee", joinColumns = @JoinColumn(name="employee_id"), inverseJoinColumns = @JoinColumn(name="admin_id"))
-	private List<Employee> employees;
+	private Set<Employee> employees;
 
 
 	public void addEmployee(Employee employee) {
@@ -31,7 +33,7 @@ public class Admin extends Person {
 			throw new IllegalArgumentException();
 		}
 		if (employees == null) {
-			employees = new ArrayList<>();
+			employees = new HashSet<>();
 		}
 		employees.add(employee);
 	}

@@ -44,6 +44,5 @@ public class Employee extends Person {
 		}
 		activities.add(activity);
 	}
-	
-	
+
 }

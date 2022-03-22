@@ -12,12 +12,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("${api.path}")
@@ -35,7 +35,7 @@ public class HomePageController {
         Person person = userService.getUserByUserName(authentication.getName());
         model.addAttribute("user", person);
         if (person.getAuthorityType() == AuthorityType.ADMIN){
-            List<Employee> employees = ((Admin) person).getEmployees();
+            Set<Employee> employees = ((Admin) person).getEmployees();
             model.addAttribute("employees", employees);
         }else if(person.getAuthorityType() == AuthorityType.EMPLOYEE){
             List<Activity> activities = ((Employee) person).getActivities();

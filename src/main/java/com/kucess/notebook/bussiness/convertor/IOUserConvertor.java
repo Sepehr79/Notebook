@@ -10,6 +10,7 @@ import com.kucess.notebook.model.io.EmployeeIO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,7 +36,7 @@ public class IOUserConvertor {
                 .build();
     }
 
-    public List<EmployeeIO> employeesToIO(List<Employee> employees){
+    public List<EmployeeIO> employeesToIO(Set<Employee> employees){
         if (employees != null && !employees.isEmpty()){
             return employees.stream().map(employee -> EmployeeIO.builder()
                     .name(employee.getName())
