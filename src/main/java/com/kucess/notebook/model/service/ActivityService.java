@@ -54,8 +54,13 @@ public class ActivityService {
         activity.setScore(activityIO.getScore());
     }
 
-    public void deleteActivityFromEmployee(long id){
-        activityRepo.deleteById(id);
+    public void deleteActivity(long id){
+        Optional<Activity> activity = activityRepo.findById(id);
+        if (activity.isEmpty())
+            throw new IllegalArgumentException("Activity not found with the given id");
+        activity.get().getAdmin().getActivities().remove(activity.get());
+        activity.get().getEmployee().getActivities().remove(activity.get());
+        activityRepo.delete(activity.get());
     }
 
     public List<ActivityIO> findActivityByAdminUserNameAndEmployeeUserName(String adminUserName, String employeeUserName){

@@ -67,7 +67,7 @@ public class ActivitiesPageController {
 
     @PostMapping("/employees/{empUserName}/activities/{actId}/remove")
     public String deleteActivity(@PathVariable String actId, @PathVariable String empUserName){
-        activityService.deleteActivityFromEmployee(Long.parseLong(actId));
+        activityService.deleteActivity(Long.parseLong(actId));
         return String.format(EMPLOYEE_ACTIVITIES, empUserName);
     }
 

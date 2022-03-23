@@ -170,14 +170,13 @@ class ServiceTest {
         ActivityIO activityIO = activities.stream().findFirst().get();
         assertEquals(1, activities.size());
         assertEquals(activity.getActivityName(), activityIO.getActivityName());
-        assertEquals(1 ,activityIO.getId());
 
         activityIO.setScore(20);
         activityService.updateActivityFromEmployee(activityIO);
         assertEquals(20 ,employeeRepo.findByUserName("emp").get().getActivities().stream().findFirst().get().getScore());
 
 
-        activityService.deleteActivityFromEmployee(1);
+        activityService.deleteActivity(activityIO.getId());
         assertEquals(0 ,employeeRepo.findByUserName("emp").get().getActivities().size());
         assertFalse(activityRepo.findAll().iterator().hasNext());
         assertEquals(0, adminRepo.findByUserName("test").get().getActivities().size());
@@ -187,21 +186,28 @@ class ServiceTest {
     @Transactional
     void removeAndEditMultipleActivities(){
         addEmployeeToAdminTest();
-        ActivityIO activityIO1 = ActivityIO.builder().activityName("1").activityDescription("1").score(10).build();
-        ActivityIO activityIO2 = ActivityIO.builder().activityName("2").activityDescription("2").score(20).build();
-        ActivityIO activityIO3 = ActivityIO.builder().activityName("3").activityDescription("3").score(30).build();
+        ActivityIO activityIO1 = ActivityIO.builder().activityName("1").id(1).activityDescription("1").score(10).build();
+        ActivityIO activityIO2 = ActivityIO.builder().activityName("2").id(2).activityDescription("2").score(20).build();
+        ActivityIO activityIO3 = ActivityIO.builder().activityName("3").id(3).activityDescription("3").score(30).build();
         activityService.addActivityToEmployee("test", "emp", activityIO1);
         activityService.addActivityToEmployee("test", "emp", activityIO2);
         activityService.addActivityToEmployee("test", "emp", activityIO3);
 
         List<ActivityIO> activityIOList = activityService.findActivityByAdminUserNameAndEmployeeUserName("test", "emp");
+        activityService.deleteActivity(1);
+        try {
+            activityService.findActivityById(1);
+            fail();
+        }catch (Exception exception){
+            assertTrue(exception instanceof IllegalArgumentException);
+        }
+
         assertEquals(3, activityIOList.size());
         assertEquals("1" ,activityIOList.get(0).getActivityName());
         assertEquals("2" ,activityIOList.get(1).getActivityName());
         assertEquals("3" ,activityIOList.get(2).getActivityName());
-        activityService.deleteActivityFromEmployee(2);
         List<ActivityIO> byAdminUserNameAndEmployeeUserName = activityService.findActivityByAdminUserNameAndEmployeeUserName("test", "emp");
-        assertEquals(30, byAdminUserNameAndEmployeeUserName.get(1).getScore());
+        assertEquals(2 ,byAdminUserNameAndEmployeeUserName.size());
     }
 
 }
