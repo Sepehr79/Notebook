@@ -27,17 +27,12 @@ public class HomePageController {
     private static final String USER = "user";
     private static final String EMPLOYEES = "employees";
     private static final String EMPLOYEE = "employee";
-    private static final String ACTIVITIES = "activities";
-    private static final String ACTIVITY = "activity";
 
     private static final String REDIRECT_TO_HOME_PAGE = "redirect:/notebook/v1/home";
 
     private final UserService userService;
 
     private final EmployeeService employeeService;
-
-    private final ActivityService activityService;
-
 
     @GetMapping("/home")
     @Transactional
@@ -49,7 +44,7 @@ public class HomePageController {
             model.addAttribute(EMPLOYEES, employees);
         }else if(person.getAuthorityType() == AuthorityType.EMPLOYEE){
             List<Activity> activities = ((Employee) person).getActivities();
-            model.addAttribute(ACTIVITIES, activities);
+            model.addAttribute("activities", activities);
         }
         return "home";
     }
@@ -92,61 +87,6 @@ public class HomePageController {
             usernameNotFoundException.printStackTrace();
         }
         return REDIRECT_TO_HOME_PAGE;
-    }
-
-    @GetMapping("/employees/{employeeUserName}/activities")
-    public String getActivities(
-            @PathVariable String employeeUserName,
-            Authentication authentication,
-            Model model
-    ){
-        String adminUserName = authentication.getName();
-        List<ActivityIO> activityIOList =
-                activityService.findActivityByAdminUserNameAndEmployeeUserName(adminUserName, employeeUserName);
-        model.addAttribute(ACTIVITIES, activityIOList);
-        model.addAttribute("empUserName", employeeUserName);
-        return "employeeActivities";
-    }
-
-    @GetMapping("/employees/{employeeUserName}/activities/insert")
-    public String addActivity(@PathVariable String employeeUserName, Model model){
-        ActivityIO activityIO = new ActivityIO();
-        model.addAttribute(ACTIVITY, activityIO);
-        model.addAttribute("employeeUserName", employeeUserName);
-        return ACTIVITY;
-    }
-
-    @PostMapping("/employees/{employeeUserName}/activities/insert")
-    @Transactional
-    public String addActivity(
-            @ModelAttribute(ACTIVITY) @Valid ActivityIO activityIO,
-            BindingResult bindingResult,
-            Authentication authentication,
-            @PathVariable String employeeUserName
-    ){
-        if (bindingResult.hasErrors()){
-            return ACTIVITY;
-        }
-        String adminUserName = authentication.getName();
-        if (activityIO.getId() == 0)
-            activityService.addActivityToEmployee(adminUserName, employeeUserName, activityIO);
-        else
-            activityService.updateActivity(activityIO);
-        return "redirect:/notebook/v1/employees/" + employeeUserName + "/activities";
-    }
-
-    @PostMapping("/employees/{empUserName}/activities/{actId}/remove")
-    public String deleteActivity(@PathVariable String actId, @PathVariable String empUserName){
-        activityService.deleteActivityFromEmployee(Long.parseLong(actId));
-        return "redirect:/notebook/v1/employees/" + empUserName + "/activities";
-    }
-
-    @GetMapping("/employees/{empUserName}/activities/{actId}")
-    public String getUpdatingActivity(@PathVariable String empUserName, @PathVariable String actId, Model model){
-        ActivityIO activityById = activityService.findActivityById(Long.parseLong(actId));
-        model.addAttribute(ACTIVITY, activityById);
-        model.addAttribute("employeeUserName", empUserName);
-        return ACTIVITY;
     }
 
 }
