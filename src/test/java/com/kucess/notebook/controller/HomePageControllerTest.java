@@ -63,6 +63,8 @@ class HomePageControllerTest {
         Mockito.when(authentication.getName()).thenReturn("employee");
         homePageController.findUser(authentication, model);
         assertTrue(model.containsAttribute("activities"));
+
+
     }
 
 
