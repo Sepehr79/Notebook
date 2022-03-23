@@ -26,12 +26,12 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .formLogin().defaultSuccessUrl("/notebook/v1/welcome", true)
+                .formLogin().defaultSuccessUrl("/notebook/v1/home", true)
                 .and()
                 .logout()
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/notebook/v1/welcome").authenticated()
+                .mvcMatchers("/notebook/v1/home").authenticated()
                 .mvcMatchers("/notebook/v1/employees/**").hasAnyAuthority("ADMIN")
                 .mvcMatchers("/").permitAll()
                 .mvcMatchers("/signup").permitAll();

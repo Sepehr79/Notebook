@@ -57,7 +57,7 @@
                 </td>
                 <td>
                     <form th:method="post"
-                          th:action="@{/notebook/v1/employees/{userName}(userName=${emp.userName})}">
+                          th:action="@{/notebook/v1/employees/{userName}/remove(userName=${emp.userName})}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <input type="submit" value="delete">
                     </form>
@@ -66,7 +66,7 @@
         </table>
 
         <a th:href="@{/notebook/v1/employees}">Add new employee</a>
-        <form method="post" th:action="@{/notebook/v1/employees/insertCurrent}">
+        <form method="post" th:action="@{/notebook/v1/employees/insert}">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <label>
                 <input type="text" name="userName">

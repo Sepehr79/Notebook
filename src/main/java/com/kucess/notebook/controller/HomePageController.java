@@ -30,7 +30,7 @@ public class HomePageController {
     private static final String ACTIVITIES = "activities";
     private static final String ACTIVITY = "activity";
 
-    private static final String REDIRECT_TO_HOME_PAGE = "redirect:/notebook/v1/welcome";
+    private static final String REDIRECT_TO_HOME_PAGE = "redirect:/notebook/v1/home";
 
     private final UserService userService;
 
@@ -39,7 +39,7 @@ public class HomePageController {
     private final ActivityService activityService;
 
 
-    @GetMapping("/welcome")
+    @GetMapping("/home")
     @Transactional
     public String findUser(Authentication authentication, Model model){
         Person person = userService.getUserByUserName(authentication.getName());
@@ -75,7 +75,7 @@ public class HomePageController {
         return REDIRECT_TO_HOME_PAGE;
     }
 
-    @PostMapping(value = "/employees/{employeeUserName}")
+    @PostMapping(value = "/employees/{employeeUserName}/remove")
     @Transactional
     public String removeEmployeeFromAdmin(@PathVariable("employeeUserName") String username, Authentication authentication){
         String adminUserName = authentication.getName();
@@ -83,7 +83,7 @@ public class HomePageController {
         return REDIRECT_TO_HOME_PAGE;
     }
 
-    @PostMapping("/employees/insertCurrent")
+    @PostMapping("/employees/insert")
     @Transactional
     public String addCurrentEmployee(@RequestParam("userName") String userName, Authentication authentication){
         try {
@@ -135,7 +135,7 @@ public class HomePageController {
         return "redirect:/notebook/v1/employees/" + employeeUserName + "/activities";
     }
 
-    @PostMapping("/employees/{empUserName}/activities/{actId}/delete")
+    @PostMapping("/employees/{empUserName}/activities/{actId}/remove")
     public String deleteActivity(@PathVariable String actId, @PathVariable String empUserName){
         activityService.deleteActivityFromEmployee(Long.parseLong(actId));
         return "redirect:/notebook/v1/employees/" + empUserName + "/activities";
