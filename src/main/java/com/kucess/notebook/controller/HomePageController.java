@@ -1,9 +1,7 @@
 package com.kucess.notebook.controller;
 
 import com.kucess.notebook.model.entity.*;
-import com.kucess.notebook.model.io.ActivityIO;
 import com.kucess.notebook.model.io.EmployeeIO;
-import com.kucess.notebook.model.service.ActivityService;
 import com.kucess.notebook.model.service.EmployeeService;
 import com.kucess.notebook.model.service.UserService;
 import lombok.RequiredArgsConstructor;

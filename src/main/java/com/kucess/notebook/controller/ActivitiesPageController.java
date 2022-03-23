@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ActivitiesPageController {
 
+    private static final String EMPLOYEE_ACTIVITIES = "redirect:/notebook/v1/employees/%s/activities";
     private static final String ACTIVITIES = "activities";
     private static final String ACTIVITY = "activity";
 
@@ -61,13 +62,13 @@ public class ActivitiesPageController {
             activityService.addActivityToEmployee(adminUserName, employeeUserName, activityIO);
         else
             activityService.updateActivity(activityIO);
-        return "redirect:/notebook/v1/employees/" + employeeUserName + "/activities";
+        return String.format(EMPLOYEE_ACTIVITIES, employeeUserName);
     }
 
     @PostMapping("/employees/{empUserName}/activities/{actId}/remove")
     public String deleteActivity(@PathVariable String actId, @PathVariable String empUserName){
         activityService.deleteActivityFromEmployee(Long.parseLong(actId));
-        return "redirect:/notebook/v1/employees/" + empUserName + "/activities";
+        return String.format(EMPLOYEE_ACTIVITIES, empUserName);
     }
 
     @GetMapping("/employees/{empUserName}/activities/{actId}")
