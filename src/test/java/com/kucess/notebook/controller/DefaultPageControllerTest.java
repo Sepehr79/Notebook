@@ -18,7 +18,6 @@ class DefaultPageControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-
     @Test
     void registerUserTest() throws Exception {
         mockMvc.perform(get("/"))
