@@ -24,23 +24,32 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class HomePageController {
 
+    private static final String USER = "user";
+    private static final String EMPLOYEES = "employees";
+    private static final String EMPLOYEE = "employee";
+    private static final String ACTIVITIES = "activities";
+    private static final String ACTIVITY = "activity";
+
+    private static final String REDIRECT_TO_HOME_PAGE = "redirect:/notebook/v1/welcome";
+
     private final UserService userService;
 
     private final EmployeeService employeeService;
 
     private final ActivityService activityService;
 
+
     @GetMapping("/welcome")
     @Transactional
     public String findUser(Authentication authentication, Model model){
         Person person = userService.getUserByUserName(authentication.getName());
-        model.addAttribute("user", person);
+        model.addAttribute(USER, person);
         if (person.getAuthorityType() == AuthorityType.ADMIN){
             Set<Employee> employees = ((Admin) person).getEmployees();
-            model.addAttribute("employees", employees);
+            model.addAttribute(EMPLOYEES, employees);
         }else if(person.getAuthorityType() == AuthorityType.EMPLOYEE){
             List<Activity> activities = ((Employee) person).getActivities();
-            model.addAttribute("activities", activities);
+            model.addAttribute(ACTIVITIES, activities);
         }
         return "home";
     }
@@ -48,22 +57,22 @@ public class HomePageController {
     @GetMapping("/employees")
     public String addEmployeesPages(Model model){
         EmployeeIO employeeIO = new EmployeeIO();
-        model.addAttribute("employee", employeeIO);
-        return "employee";
+        model.addAttribute(EMPLOYEE, employeeIO);
+        return EMPLOYEE;
     }
 
     @PostMapping("/employees")
     @Transactional
-    public String registerEmployee(@ModelAttribute("employee") @Valid EmployeeIO employeeIO,
+    public String registerEmployee(@ModelAttribute(EMPLOYEE) @Valid EmployeeIO employeeIO,
                                    BindingResult bindingResult,
                                    Authentication authentication
                                    ){
         if (bindingResult.hasErrors()){
-            return "employee";
+            return EMPLOYEE;
         }
         String adminUserName = authentication.getName();
         employeeService.addEmployeeToAdmin(adminUserName, employeeIO);
-        return "redirect:/notebook/v1/welcome";
+        return REDIRECT_TO_HOME_PAGE;
     }
 
     @PostMapping(value = "/employees/{employeeUserName}")
@@ -71,7 +80,7 @@ public class HomePageController {
     public String removeEmployeeFromAdmin(@PathVariable("employeeUserName") String username, Authentication authentication){
         String adminUserName = authentication.getName();
         employeeService.removeEmployeeFromAdmin(adminUserName, username);
-        return "redirect:/notebook/v1/welcome";
+        return REDIRECT_TO_HOME_PAGE;
     }
 
     @PostMapping("/employees/insertCurrent")
@@ -82,7 +91,7 @@ public class HomePageController {
         }catch (UsernameNotFoundException usernameNotFoundException){
             usernameNotFoundException.printStackTrace();
         }
-        return "redirect:/notebook/v1/welcome";
+        return REDIRECT_TO_HOME_PAGE;
     }
 
     @GetMapping("/employees/{employeeUserName}/activities")
@@ -94,7 +103,7 @@ public class HomePageController {
         String adminUserName = authentication.getName();
         List<ActivityIO> activityIOList =
                 activityService.findActivityByAdminUserNameAndEmployeeUserName(adminUserName, employeeUserName);
-        model.addAttribute("activities", activityIOList);
+        model.addAttribute(ACTIVITIES, activityIOList);
         model.addAttribute("empUserName", employeeUserName);
         return "employeeActivities";
     }
@@ -102,21 +111,21 @@ public class HomePageController {
     @GetMapping("/employees/{employeeUserName}/activities/insert")
     public String addActivity(@PathVariable String employeeUserName, Model model){
         ActivityIO activityIO = new ActivityIO();
-        model.addAttribute("activity", activityIO);
+        model.addAttribute(ACTIVITY, activityIO);
         model.addAttribute("employeeUserName", employeeUserName);
-        return "activity";
+        return ACTIVITY;
     }
 
     @PostMapping("/employees/{employeeUserName}/activities/insert")
     @Transactional
     public String addActivity(
-            @ModelAttribute("activity") @Valid ActivityIO activityIO,
+            @ModelAttribute(ACTIVITY) @Valid ActivityIO activityIO,
             BindingResult bindingResult,
             Authentication authentication,
             @PathVariable String employeeUserName
     ){
         if (bindingResult.hasErrors()){
-            return "activity";
+            return ACTIVITY;
         }
         String adminUserName = authentication.getName();
         if (activityIO.getId() == 0)
@@ -135,9 +144,9 @@ public class HomePageController {
     @GetMapping("/employees/{empUserName}/activities/{actId}")
     public String getUpdatingActivity(@PathVariable String empUserName, @PathVariable String actId, Model model){
         ActivityIO activityById = activityService.findActivityById(Long.parseLong(actId));
-        model.addAttribute("activity", activityById);
+        model.addAttribute(ACTIVITY, activityById);
         model.addAttribute("employeeUserName", empUserName);
-        return "activity";
+        return ACTIVITY;
     }
 
 }
