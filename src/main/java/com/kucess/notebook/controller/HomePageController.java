@@ -28,14 +28,12 @@ public class HomePageController {
 
     private static final String REDIRECT_TO_HOME_PAGE = "redirect:/notebook/v1/home";
 
-    private final UserService userService;
-
     private final EmployeeService employeeService;
 
     @GetMapping("/home")
     @Transactional
     public String findUser(Authentication authentication, Model model){
-        Person person = userService.getUserByUserName(authentication.getName());
+        Person person = employeeService.getUserByUserName(authentication.getName());
         model.addAttribute(USER, person);
         if (person.getAuthorityType() == AuthorityType.ADMIN){
             Set<Employee> employees = ((Admin) person).getEmployees();

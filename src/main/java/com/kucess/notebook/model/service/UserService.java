@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Supplier;
 
 @Getter
 @RequiredArgsConstructor
-@Service
-public class UserService {
+public abstract class UserService {
 
     private final PersonRepo personRepo;
 

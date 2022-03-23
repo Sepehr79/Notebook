@@ -17,9 +17,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActivityService {
 
-    private final UserService userService;
     private final ActivityRepo activityRepo;
     private final IOUserConvertor ioUserConvertor;
+    private final UserService userService;
 
     public void updateActivity(ActivityIO activityIO){
         Optional<Activity> byId = activityRepo.findById(activityIO.getId());
