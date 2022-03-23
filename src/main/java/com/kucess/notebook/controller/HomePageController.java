@@ -42,14 +42,14 @@ public class HomePageController {
             List<Activity> activities = ((Employee) person).getActivities();
             model.addAttribute("activities", activities);
         }
-        return "welcome";
+        return "home";
     }
 
     @GetMapping("/employees")
     public String addEmployeesPages(Model model){
         EmployeeIO employeeIO = new EmployeeIO();
         model.addAttribute("employee", employeeIO);
-        return "addEmployee";
+        return "employee";
     }
 
     @PostMapping("/employees")
@@ -59,7 +59,7 @@ public class HomePageController {
                                    Authentication authentication
                                    ){
         if (bindingResult.hasErrors()){
-            return "addEmployee";
+            return "employee";
         }
         String adminUserName = authentication.getName();
         employeeService.addEmployeeToAdmin(adminUserName, employeeIO);
@@ -96,7 +96,7 @@ public class HomePageController {
                 activityService.findActivityByAdminUserNameAndEmployeeUserName(adminUserName, employeeUserName);
         model.addAttribute("activities", activityIOList);
         model.addAttribute("empUserName", employeeUserName);
-        return "activities";
+        return "employeeActivities";
     }
 
     @GetMapping("/employees/{employeeUserName}/activities/insert")
@@ -104,7 +104,7 @@ public class HomePageController {
         ActivityIO activityIO = new ActivityIO();
         model.addAttribute("activity", activityIO);
         model.addAttribute("employeeUserName", employeeUserName);
-        return "insertActivity";
+        return "activity";
     }
 
     @PostMapping("/employees/{employeeUserName}/activities/insert")
@@ -116,7 +116,7 @@ public class HomePageController {
             @PathVariable String employeeUserName
     ){
         if (bindingResult.hasErrors()){
-            return "insertActivity";
+            return "activity";
         }
         String adminUserName = authentication.getName();
         if (activityIO.getId() == 0)
@@ -137,7 +137,7 @@ public class HomePageController {
         ActivityIO activityById = activityService.findActivityById(Long.parseLong(actId));
         model.addAttribute("activity", activityById);
         model.addAttribute("employeeUserName", empUserName);
-        return "insertActivity";
+        return "activity";
     }
 
 }

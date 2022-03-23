@@ -22,13 +22,13 @@ public class RegisterController {
     public String getAdminsRegisterPage(Model model){
         AdminIO userIO = new AdminIO();
         model.addAttribute("user", userIO);
-        return "registerAdmin";
+        return "signup";
     }
 
     @PostMapping("/signup")
     public String registerAdmin(@ModelAttribute("user") @Valid AdminIO userIO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return "registerAdmin";
+            return "signup";
         }
         adminService.saveAdmin(userIO);
         return "redirect:/login";

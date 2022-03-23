@@ -8,7 +8,7 @@ public class DefaultPageController {
 
     @GetMapping("/")
     public String redirectToMainPage(){
-        return "home";
+        return "default";
     }
 
 }
