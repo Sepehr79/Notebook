@@ -33,7 +33,8 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .mvcMatchers("/notebook/v1/home").authenticated()
                 .mvcMatchers("/notebook/v1/employees/**").hasAnyAuthority("ADMIN")
-                .mvcMatchers("/").permitAll()
-                .mvcMatchers("/signup").permitAll();
+                .mvcMatchers("/notebook/v1").permitAll()
+                .mvcMatchers("/signup").permitAll()
+                .antMatchers("/resources/templates/**").permitAll();
     }
 }

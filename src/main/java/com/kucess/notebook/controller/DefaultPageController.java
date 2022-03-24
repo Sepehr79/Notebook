@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DefaultPageController {
 
-    @GetMapping("/")
+    @GetMapping("/notebook/v1")
     public String redirectToMainPage(){
         return "default";
     }

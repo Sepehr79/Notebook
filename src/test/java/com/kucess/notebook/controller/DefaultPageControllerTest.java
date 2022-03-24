@@ -20,7 +20,7 @@ class DefaultPageControllerTest {
 
     @Test
     void registerUserTest() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/notebook/v1/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("default"))
                 .andDo(print());
