@@ -1,16 +1,18 @@
 package com.kucess.notebook.model.service;
 
-import com.kucess.notebook.bussiness.IOUserConvertor;
+import com.kucess.notebook.bussiness.convertor.IOUserConvertor;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.io.AdminIO;
 import com.kucess.notebook.model.repo.PersonRepo;
 import com.kucess.notebook.model.service.exception.DuplicateUsernameException;
 import lombok.SneakyThrows;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Primary
 public class AdminService extends UserService {
 
     private final IOUserConvertor ioUserConvertor;

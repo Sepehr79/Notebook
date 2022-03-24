@@ -10,9 +10,10 @@ import lombok.*;
 @Builder
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString
 public class ActivityIO {
 
-    private int index;
+    private long id;
 
     private @NonNull String activityName;
 

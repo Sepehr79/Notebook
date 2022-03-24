@@ -19,6 +19,7 @@ public class PersonDetailsService implements UserDetailsService {
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new PersonDetails(personRepo.findPersonByUserName(username).orElseThrow((Supplier<Throwable>) () -> new UsernameNotFoundException("User not found with the given username: " + username)));
+        return new PersonDetails(personRepo.findPersonByUserName(username).orElseThrow((Supplier<Throwable>) () ->
+                new UsernameNotFoundException("User not found with the given username: " + username)));
     }
 }
