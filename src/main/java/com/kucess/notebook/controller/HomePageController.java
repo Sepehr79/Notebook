@@ -3,8 +3,8 @@ package com.kucess.notebook.controller;
 import com.kucess.notebook.model.entity.*;
 import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.service.EmployeeService;
-import com.kucess.notebook.model.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -20,6 +20,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("${api.path}")
 @RequiredArgsConstructor
+@Slf4j
 public class HomePageController {
 
     private static final String USER = "user";
@@ -46,7 +47,7 @@ public class HomePageController {
     }
 
     @GetMapping("/employees")
-    public String addEmployeesPages(Model model){
+    public String addEmployeesPage(Model model){
         EmployeeIO employeeIO = new EmployeeIO();
         model.addAttribute(EMPLOYEE, employeeIO);
         return EMPLOYEE;
@@ -80,7 +81,7 @@ public class HomePageController {
         try {
             employeeService.addEmployeeToAdmin(authentication.getName(), userName);
         }catch (UsernameNotFoundException usernameNotFoundException){
-            usernameNotFoundException.printStackTrace();
+            log.info("User not found with the given username: {}", usernameNotFoundException.getMessage());
         }
         return REDIRECT_TO_HOME_PAGE;
     }

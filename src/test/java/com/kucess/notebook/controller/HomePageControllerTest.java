@@ -3,8 +3,8 @@ package com.kucess.notebook.controller;
 import com.kucess.notebook.model.entity.Admin;
 import com.kucess.notebook.model.entity.AuthorityType;
 import com.kucess.notebook.model.entity.Employee;
+import com.kucess.notebook.model.io.EmployeeIO;
 import com.kucess.notebook.model.service.EmployeeService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,8 +26,31 @@ class HomePageControllerTest {
     @Mock
     EmployeeService employeeService;
 
-    @BeforeEach
-    void whenAdmin(){
+    @Test
+    void findUserTest() {
+        mockEmpService();
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Model model = new BindingAwareModelMap();
+        Mockito.when(authentication.getName()).thenReturn("admin");
+        homePageController.findUser(authentication, model);
+        assertTrue(model.containsAttribute("employees"));
+        Object object = model.getAttribute("user");
+        assertTrue(object instanceof Admin);
+
+        Mockito.when(authentication.getName()).thenReturn("employee");
+        homePageController.findUser(authentication, model);
+        assertTrue(model.containsAttribute("activities"));
+    }
+
+    @Test
+    void addEmployeePageTest(){
+        Model model = new BindingAwareModelMap();
+        homePageController.addEmployeesPage(model);
+        assertTrue(model.getAttribute("employee") instanceof EmployeeIO);
+    }
+
+
+    private void mockEmpService(){
         Mockito.when(employeeService.getUserByUserName("admin"))
                 .thenReturn(
                         Admin.builder()
@@ -49,24 +72,5 @@ class HomePageControllerTest {
                                 .build()
                 );
     }
-
-    @Test
-    void findUserTest() {
-        Authentication authentication = Mockito.mock(Authentication.class);
-        Model model = new BindingAwareModelMap();
-        Mockito.when(authentication.getName()).thenReturn("admin");
-        homePageController.findUser(authentication, model);
-        assertTrue(model.containsAttribute("employees"));
-        Object object = model.getAttribute("user");
-        assertTrue(object instanceof Admin);
-
-        Mockito.when(authentication.getName()).thenReturn("employee");
-        homePageController.findUser(authentication, model);
-        assertTrue(model.containsAttribute("activities"));
-
-
-    }
-
-
 
 }
