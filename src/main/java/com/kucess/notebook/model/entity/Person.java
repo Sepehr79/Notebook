@@ -7,6 +7,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -33,6 +35,20 @@ public class Person {
 
 	@Enumerated(EnumType.STRING)
 	private AuthorityType authorityType;
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Activity> activities;
+
+	public void addActivity(Activity activity){
+		if (activity == null){
+			throw new IllegalArgumentException();
+		}
+		if (activities == null){
+			activities = new ArrayList<>();
+		}
+		activities.add(activity);
+	}
+
 
 	@Override
 	public boolean equals(Object o) {
