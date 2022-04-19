@@ -43,9 +43,7 @@ public class SecurityEnableConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAfter((request, response, chain) -> {
                     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    if (!authentication.getName().equals("anonymousUser")) {
-                        log.info("User successfully authenticated with the username: {}\n authorities: {}", authentication.getName(), authentication.getAuthorities());
-                    }
+                    log.info("User successfully authenticated with the username: {}\n authorities: {}", authentication.getName(), authentication.getAuthorities());
                     chain.doFilter(request, response);
                 } ,FilterSecurityInterceptor.class);
     }
