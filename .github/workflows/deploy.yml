@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+env:
+  CAPTCHA_SECRET: ${{ secrets.CAPTCHA_SECRET }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
