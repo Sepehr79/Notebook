@@ -2,6 +2,9 @@ name: build
 
 on: [push]
 
+env:
+  CAPTCHA_SECRET: ${{ secrets.CAPTCHA_SECRET }}
+
 jobs:
   build:
     name: build
