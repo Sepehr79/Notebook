@@ -7,4 +7,4 @@ Notebook developed to record the activities of the  computer engineering associa
 
 ثبت فعالیت های اعضای انجمن
 
-[Deployed on arvan cloud](https://notebook-kucess.apps.ir-thr-at1.arvan.run/notebook/v1/)
+[Deployed on arvan cloud](http://notebook-note-book.apps.ir-thr-ba1.arvanpaas.ir/notebook/v1)
