@@ -3,6 +3,8 @@ package com.kucess.notebook.model.io;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,5 +24,7 @@ public class ActivityIO {
     private @NonNull double score;
 
     private String adminUserName;
+
+    private Date date;
 
 }

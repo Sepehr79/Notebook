@@ -69,6 +69,7 @@ public class ActivityService {
         for (Activity activity: activities){
             ActivityIO activityIO = ioUserConvertor.activityToIO(activity);
             activityIO.setId(activity.getId());
+            activityIO.setDate(activity.getDate());
             activityIOList.add(activityIO);
         }
         return activityIOList;

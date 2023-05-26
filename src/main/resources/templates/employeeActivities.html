@@ -19,6 +19,7 @@
             <td>name</td>
             <td>description</td>
             <td>score</td>
+            <td>date</td>
             <td>edit</td>
             <td>delete</td>
         </tr>
@@ -26,6 +27,7 @@
             <td th:text="${act.activityName}"></td>
             <td th:text="${act.activityDescription}"></td>
             <td th:text="${act.score}"></td>
+            <td th:text="${act.date}"></td>
             <td>
                 <a th:href="@{/notebook/v1/employees/{empUserName}/activities/{actId}(empUserName=${empUserName}, actId=${act.getId})}">Update</a>
             </td>
